@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: oklch(0.98 0.002 240);
+  --color-foreground: oklch(0.15 0.02 240);
+  --color-card: #ffffff;
+  --color-primary: #1e3a8a; /* Azul Petrobras */
+  --color-accent: #0ea5e9;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-destructive: #ef4444;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
