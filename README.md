@@ -1,3 +1,24 @@
+# plataforma-lince-julia
+
+Frontend em Next.js para a Plataforma Lince.
+
+## Como rodar (rápido)
+
+- Instalar dependências:
+
+```bash
+pnpm install
+```
+
+- Rodar em desenvolvimento:
+
+```bash
+pnpm dev
+```
+
+## Observações
+
+- Arquivos sensíveis (ex.: `.env`) estão listados no `.gitignore`.
 # v0-plataforma-lince
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [v0](https://v0.app).

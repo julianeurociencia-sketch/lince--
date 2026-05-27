@@ -17,6 +17,7 @@ import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { useSidebar } from '@/components/ui/sidebar'
+import { useState, useEffect } from 'react'
 
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
@@ -29,8 +30,22 @@ const menuItems = [
 
 export function Sidebar() {
   const pathname = usePathname()
-  const { state, toggleSidebar } = useSidebar()
-  const isCollapsed = state === 'collapsed'
+  const sidebarContext = useSidebar()
+  const [isCollapsed, setIsCollapsed] = useState(false)
+
+  useEffect(() => {
+    // Verificar localStorage para manter o estado persistido
+    const saved = localStorage.getItem('sidebar-collapsed')
+    if (saved !== null) {
+      setIsCollapsed(JSON.parse(saved))
+    }
+  }, [])
+
+  const handleToggle = () => {
+    const newState = !isCollapsed
+    setIsCollapsed(newState)
+    localStorage.setItem('sidebar-collapsed', JSON.stringify(newState))
+  }
 
   return (
     <aside 
@@ -38,6 +53,7 @@ export function Sidebar() {
         "fixed left-0 top-0 h-screen bg-blue-900 text-white transition-all duration-300 z-50 flex flex-col shadow-2xl",
         isCollapsed ? "w-[72px]" : "w-[260px]"
       )}
+      data-sidebar-state={isCollapsed ? 'collapsed' : 'expanded'}
     >
       {/* Logo Area */}
       <div className="p-6 flex items-center justify-between">
@@ -49,7 +65,7 @@ export function Sidebar() {
         <Button 
           variant="ghost" 
           size="icon" 
-          onClick={toggleSidebar}
+          onClick={handleToggle}
           className="text-white hover:bg-blue-800 ml-auto"
         >
           {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
