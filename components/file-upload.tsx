@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { Upload, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
-// ADICIONADO: DialogTitle e DialogDescription para acessibilidade
 import { 
   Dialog, 
   DialogContent, 
@@ -12,7 +11,7 @@ import {
   DialogDescription 
 } from '@/components/ui/dialog'
 
-// Conteúdo auxiliar
+// Conteúdo auxiliar atualizado com todas as categorias
 const manualContent = {
   'Passagens e locomoções': {
     exigencias: [
@@ -25,6 +24,54 @@ const manualContent = {
       'Cartão de crédito pessoal só é aceito para passagens aéreas.'
     ],
     citeExigencia: '[CITE: 1, 347]',
+  },
+  'Diárias e ajuda de custo': {
+    exigencias: [
+      'Relatório de viagem aprovado e assinado',
+      'Comprovantes de deslocamento',
+      'Recibos de hospedagem e alimentação (quando aplicável)'
+    ],
+    compliance: [
+      'Os valores não podem ultrapassar os limites previstos no manual de PD&I.',
+      'Devem estar estritamente vinculados às atividades diretas do projeto.'
+    ],
+    citeExigencia: '[CITE: 2, 112]',
+  },
+  'Material de consumo': {
+    exigencias: [
+      'Nota Fiscal Eletrônica (NF-e) com atesto de recebimento',
+      'Comprovante de pagamento (transferência bancária da conta do projeto)',
+      'Mínimo de três orçamentos (para valores acima do limite de dispensa)'
+    ],
+    compliance: [
+      'Os materiais devem ser estritamente consumidos durante a execução do projeto.',
+      'Proibida a compra de materiais de uso administrativo contínuo (ex: papel, café) fora do escopo.'
+    ],
+    citeExigencia: '[CITE: 3, 205]',
+  },
+  'Obras e instalações': {
+    exigencias: [
+      'Nota Fiscal de Serviços (NFS-e) ou de Material',
+      'Medição da obra assinada pelo responsável técnico',
+      'Contrato de prestação de serviços assinado'
+    ],
+    compliance: [
+      'Deve haver correlação direta com a infraestrutura necessária para a pesquisa.',
+      'Retenções tributárias (INSS, ISS) devem estar destacadas e recolhidas corretamente.'
+    ],
+    citeExigencia: '[CITE: 4, 150]',
+  },
+  'Equipamentos e material permanente': {
+    exigencias: [
+      'Nota Fiscal Eletrônica (NF-e) atestada',
+      'Termo de recebimento e tombamento físico (patrimônio)',
+      'Cotações prévias de preços'
+    ],
+    compliance: [
+      'O equipamento deve possuir placa de identificação patrimonial do financiador.',
+      'Os bens adquiridos devem permanecer alocados no laboratório/instituição executora.'
+    ],
+    citeExigencia: '[CITE: 5, 302]',
   }
 }
 
@@ -97,6 +144,7 @@ export function FileUpload({ maxFiles = 1 }: { maxFiles?: number }) {
 }
 
 export function FileUploadModal({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
+  // O useState começa com a primeira opção do nosso objeto
   const [selectedRubrica, setSelectedRubrica] = useState('Passagens e locomoções')
   const currentContent = manualContent[selectedRubrica as keyof typeof manualContent]
 
@@ -104,7 +152,7 @@ export function FileUploadModal({ isOpen, onClose }: { isOpen: boolean, onClose:
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-[900px] w-[95vw] p-0 border-none bg-transparent shadow-none outline-none [&>button]:hidden">
         
-        {/* CORREÇÃO AQUI: Títulos invisíveis para acessibilidade */}
+        {/* Títulos invisíveis para acessibilidade */}
         <DialogTitle className="sr-only">Upload e Classificação Petrobras</DialogTitle>
         <DialogDescription className="sr-only">
           Selecione a rubrica e faça o upload dos documentos conforme o manual de PD&I.
@@ -131,6 +179,7 @@ export function FileUploadModal({ isOpen, onClose }: { isOpen: boolean, onClose:
                   onChange={(e) => setSelectedRubrica(e.target.value)}
                   className="w-full bg-white border border-blue-200 rounded-lg p-3 text-sm text-[#1e40af] outline-none shadow-sm font-medium"
                 >
+                  {/* O select é montado dinamicamente com as chaves do objeto manualContent */}
                   {Object.keys(manualContent).map((rubrica) => (
                     <option key={rubrica} value={rubrica}>{rubrica}</option>
                   ))}

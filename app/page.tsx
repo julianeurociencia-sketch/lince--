@@ -60,15 +60,17 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-100 p-4">
+    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#dce8f5] p-4">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(255,255,255,0.75),transparent_28%),radial-gradient(circle_at_70%_18%,rgba(255,255,255,0.55),transparent_22%),radial-gradient(circle_at_50%_75%,rgba(207,224,246,0.95),transparent_34%),linear-gradient(180deg,#eef4fb_0%,#d9e6f5_55%,#d2e0ef_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_35%,rgba(173,195,226,0.32),transparent_0_22%),radial-gradient(circle_at_75%_65%,rgba(173,195,226,0.24),transparent_0_18%)] blur-3xl" />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
+        className="relative z-10 w-full max-w-md"
       >
         {/* Card de Login */}
-        <div className="bg-gradient-to-br from-blue-50 via-slate-50 to-blue-100/80 rounded-2xl shadow-xl border border-blue-100/50 p-8 space-y-8">
+        <div className="rounded-2xl border border-white/50 bg-white/55 p-8 space-y-8 shadow-[0_18px_50px_rgba(90,119,155,0.18)] backdrop-blur-md">
           {/* Logo */}
           <div className="flex justify-center">
             <LinceLogo size="lg" />

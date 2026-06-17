@@ -1,223 +1,236 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import {
-  FolderKanban,
-  AlertTriangle,
-  FileCheck2,
-  DollarSign,
-  TrendingUp,
-  ShieldCheck,
-  Filter,
-  Eye,
-  Clock
-} from 'lucide-react'
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Area,
-  AreaChart,
-  Line
-} from 'recharts'
 import { Sidebar } from '@/components/sidebar'
 import { Header } from '@/components/header'
-import { StatsCard } from '@/components/stats-card'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { useSidebar } from '@/components/ui/sidebar'
-import {
-  mockDashboardStats,
-  mockProjects,
-  mockCategoryData,
-  mockTimelineData
-} from '@/lib/mock-data'
-import Link from 'next/link'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { ArrowRight, CalendarDays, CheckCircle2, FileText, HelpCircle, PackageSearch, TriangleAlert, ChevronRight } from 'lucide-react'
 
-const formatCurrency = (value: number) => {
-  return value.toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-    notation: 'compact',
-    maximumFractionDigits: 1
-  })
-}
+const stats = [
+  {
+    label: 'Convênio',
+    value: '5900.0123456.25.4',
+  },
+  {
+    label: 'Parcela atual',
+    value: '03 de 06',
+  },
+  {
+    label: 'Prazo para envio',
+    value: '18 dias',
+    icon: CalendarDays,
+  },
+  {
+    label: 'Índice de conformidade',
+    value: '+12% desde a última análise',
+    tone: 'text-emerald-600',
+  },
+]
 
-const statusConfig = {
-  em_analise: { label: 'Em Análise', color: 'bg-amber-100 text-amber-700' },
-  aprovado: { label: 'Aprovado', color: 'bg-emerald-100 text-emerald-700' },
-  com_divergencias: { label: 'Com Divergências', color: 'bg-red-100 text-red-700' },
-  finalizado: { label: 'Finalizado', color: 'bg-blue-100 text-blue-700' }
-}
+const priorityItems = [
+  {
+    amount: 'R$ 8.920,00',
+    reference: 'NF 003.847',
+    title: 'Nota fiscal sem comprovante',
+    category: 'Equipamentos e material permanente',
+    status: 'Crítica',
+    statusTone: 'bg-rose-100 text-rose-700 border-rose-200',
+    icon: TriangleAlert,
+  },
+  {
+    amount: 'R$ 18.600,00',
+    reference: 'NF 001.192',
+    title: 'Valor acima do previsto',
+    category: 'Diárias e ajuda de custo',
+    status: 'Revisar',
+    statusTone: 'bg-amber-100 text-amber-800 border-amber-200',
+    icon: PackageSearch,
+  },
+  {
+    amount: 'R$ 8.420,00',
+    reference: 'NF 009.301',
+    title: 'Data fora da vigência',
+    category: 'Material de consumo',
+    status: 'Sem correspondência',
+    statusTone: 'bg-slate-100 text-slate-600 border-slate-200',
+    icon: HelpCircle,
+  },
+]
 
 export default function DashboardPage() {
   const { state } = useSidebar()
   const isSidebarCollapsed = state === 'collapsed'
 
   return (
-    <div className="min-h-screen w-full flex flex-col bg-blue-50 overflow-x-hidden">
+    <div className="min-h-screen w-full flex flex-col bg-[#F5F3EF] overflow-x-hidden">
       <Sidebar />
-      
-      {/* Header Fixo - Subtítulo Removido */}
-      <div className="fixed top-0 left-0 right-0 z-30 w-full bg-blue-900 shadow-lg">
-        <div className={cn(
-          "transition-all duration-300 ease-linear",
-          isSidebarCollapsed ? "pl-[72px]" : "pl-[72px] lg:pl-[260px]"
-        )}>
-          <Header title="Dashboard" />
+
+      <div className="fixed top-0 left-0 right-0 z-30 w-full bg-white shadow-sm">
+        <div
+          className={cn(
+            'transition-all duration-300 ease-linear',
+            isSidebarCollapsed ? 'pl-[72px]' : 'pl-[72px] lg:pl-[260px]'
+          )}
+        >
+          <Header title="" />
         </div>
       </div>
-      
+
       <div className={cn(
-        "flex-1 w-full pt-20 transition-all duration-300 ease-linear",
-        isSidebarCollapsed ? "pl-[72px]" : "pl-[72px] lg:pl-[260px]"
+        'flex-1 w-full pt-24 transition-all duration-300 ease-linear',
+        isSidebarCollapsed ? 'pl-[72px]' : 'pl-[72px] lg:pl-[260px]'
       )}>
-        <main className="p-6 space-y-6 w-full">
-          
-          <div className="flex flex-wrap items-center gap-4">
-            <Select defaultValue="2024">
-              <SelectTrigger className="w-32 bg-white border-blue-100">
-                <SelectValue placeholder="Período" />
-              </SelectTrigger>
-              <SelectContent className="bg-white z-50">
-                <SelectItem value="2024">2024</SelectItem>
-              </SelectContent>
-            </Select>
-            <Button variant="outline" size="icon" className="bg-white border-blue-100 text-blue-600">
-              <Filter className="h-4 w-4" />
-            </Button>
-          </div>
-
-          {/* Stats Cards com fundo azul suave */}
-          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 w-full">
-            <StatsCard title="Total de Divergências" value="5" icon={AlertTriangle} trend={{ value: 5, isPositive: false }} />
-            <StatsCard title="Críticas" value="1" icon={AlertTriangle} />
-            <StatsCard title="Pendentes" value="3" icon={Clock} trend={{ value: 3, isPositive: false }} />
-            <StatsCard title="Valor Envolvido" value="R$ 736.500,00" icon={DollarSign} />
-          </div>
-
-          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 w-full">
-            <StatsCard title="Parcelas Analisadas" value="18" icon={FileCheck2} trend={{ value: 8, isPositive: true }} />
-            <StatsCard title="Taxa de Compliance" value="81.5%" icon={ShieldCheck} trend={{ value: 3, isPositive: true }} />
-          </div>
-
-          {/* Gráfico de Barras com fundo azul suave */}
-          <Card className="bg-[#ebf2ff] border-blue-100 shadow-sm w-full overflow-hidden">
-            <CardHeader>
-              <CardTitle className="text-base font-medium text-blue-900">Gastos por Categoria</CardTitle>
-              <CardDescription className="text-blue-600">Distribuição das despesas do seu projeto</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="h-80 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={mockCategoryData} layout="vertical">
-                    <CartesianGrid strokeDasharray="3 3" stroke="#d6e4ff" vertical={false} />
-                    <XAxis type="number" hide />
-                    <YAxis type="category" dataKey="name" width={120} fontSize={11} stroke="#5c85d6" />
-                    <Tooltip />
-                    <Bar dataKey="value" fill="#3b82f6" style={{ fill: '#3b82f6' }} radius={[0, 4, 4, 0]} barSize={32} />
-                  </BarChart>
-                </ResponsiveContainer>
+        <main className="space-y-8 p-8 w-full max-w-7xl mx-auto">
+          <nav className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            <span>Lince</span>
+            <ChevronRight size={12} className="text-slate-300" />
+            <span className="text-slate-900">Visão Geral</span>
+          </nav>
+          <section className="rounded-[24px] bg-white p-8 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
+            <div className="flex flex-wrap items-start justify-between gap-4 border-b border-gray-100 pb-8">
+              <div className="rounded-2xl bg-gray-50 px-5 py-4 border border-gray-100">
+                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Projeto atual</div>
+                <div className="mt-2 flex items-center gap-2 text-base font-bold text-[#1F2937]">
+                  <span className="h-2.5 w-2.5 rounded-full bg-[#10B981]" />
+                  Programa Energia do Futuro
+                </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
 
-          {/* Timeline com fundo azul suave */}
-          <Card className="bg-[#ebf2ff] border-blue-100 shadow-sm w-full overflow-hidden">
-            <CardHeader>
-              <CardTitle className="text-base font-medium text-blue-900">Timeline Financeira</CardTitle>
-              <CardDescription className="text-blue-600">Comparativo entre planejado e executado</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="h-72 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={mockTimelineData}>
-                    <defs>
-                      <linearGradient id="colorPlanejado" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.1}/>
-                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#d6e4ff" vertical={false} />
-                    <XAxis dataKey="month" fontSize={12} stroke="#5c85d6" axisLine={false} tickLine={false} />
-                    <YAxis tickFormatter={(v) => formatCurrency(v)} fontSize={12} stroke="#5c85d6" axisLine={false} tickLine={false} />
-                    <Tooltip />
-                    <Area type="monotone" dataKey="planejado" stroke="#3b82f6" fill="url(#colorPlanejado)" strokeWidth={2} />
-                    <Area type="monotone" dataKey="executado" stroke="#22d3ee" fill="transparent" strokeWidth={2} />
-                    <Line type="monotone" dataKey="divergencias" stroke="#ef4444" strokeWidth={2} />
-                  </AreaChart>
-                </ResponsiveContainer>
+            <div className="mt-8 grid gap-6 lg:grid-cols-4">
+              {stats.map((item) => {
+                const Icon = item.icon
+                return (
+                  <div key={item.label} className="p-2">
+                    <p className="text-sm text-slate-500">{item.label}</p>
+                    <div className="mt-2 flex items-center gap-2">
+                      {Icon ? <Icon className="h-4 w-4 text-[#708D7A]" /> : null}
+                      <p className={cn('text-xl font-bold text-[#1F2937]', item.tone)}>{item.value}</p>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </section>
+
+          <section className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,1fr))]">
+            <div className="rounded-[24px] bg-white p-8 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
+              <p className="text-lg font-bold text-[#1F2937]">Panorama da análise</p>
+              <p className="text-sm text-gray-500">Cruzamento automático desta parcela</p>
+
+              <div className="mt-8 flex flex-col items-center justify-center">
+                <div className="relative flex h-60 w-60 items-center justify-center rounded-full bg-[conic-gradient(#708D7A_0_87%,#F3F4F6_87%_100%)]">
+                  <div className="flex h-52 w-52 items-center justify-center rounded-full bg-white shadow-inner">
+                    <div className="text-center">
+                      <p className="text-5xl font-bold tracking-tighter text-[#1F2937]">87%</p>
+                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Conformidade</p>
+                    </div>
+                  </div>
+                </div>
+                <p className="mt-6 text-sm font-bold text-[#708D7A] bg-[#708D7A]/10 px-4 py-1 rounded-full">Boa conformidade</p>
               </div>
-            </CardContent>
-          </Card>
+            </div>
 
-          {/* Tabela com fundo azul suave */}
-          <Card className="bg-[#ebf2ff] border-blue-100 shadow-sm w-full overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between">
+            <StatCard
+              icon={FileText}
+              label="DOCUMENTOS CONFORMES"
+              value="42"
+              footer="De 48 analisados"
+            />
+            <StatCard
+              icon={TriangleAlert}
+              label="PENDÊNCIAS"
+              value="4"
+              footer="2 podem bloquear o envio"
+              footerTone="text-rose-600"
+            />
+            <StatCard
+              icon={HelpCircle}
+              label="SEM CORRESPONDÊNCIA"
+              value="2"
+              footer="Documentos fora do plano"
+            />
+          </section>
+
+          <section className="rounded-[28px] border border-slate-200 bg-white px-8 py-6 shadow-sm">
+            <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <CardTitle className="text-base font-medium text-blue-900">Detalhamento do Projeto</CardTitle>
-                <CardDescription className="text-blue-600">Visão consolidada do seu projeto financiado</CardDescription>
+                <h2 className="text-[26px] font-semibold tracking-tight text-slate-900">Pendências prioritárias</h2>
+                <p className="mt-1 text-sm text-slate-500">Itens que precisam da sua atenção</p>
               </div>
-              <Button variant="ghost" size="sm" className="text-blue-600 hover:bg-blue-100" asChild>
-                <Link href="/auditoria">Ver Tudo <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              <Button variant="ghost" className="h-auto p-0 text-base font-medium text-slate-700 hover:bg-transparent hover:text-slate-900">
+                <span>Ver todas</span>
+                <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-            </CardHeader>
-            <CardContent>
-              <div className="relative overflow-x-auto w-full">
-                <table className="w-full text-sm text-left">
-                  <thead className="bg-[#d6e4ff] text-blue-900">
-                    <tr>
-                      <th className="px-4 py-3 font-semibold uppercase tracking-wider text-[11px]">Convênio</th>
-                      <th className="px-4 py-3 font-semibold uppercase tracking-wider text-[11px]">Projeto</th>
-                      <th className="px-4 py-3 font-semibold uppercase tracking-wider text-[11px]">Valor Total</th>
-                      <th className="px-4 py-3 font-semibold uppercase tracking-wider text-[11px] text-center">Status</th>
-                      <th className="px-4 py-3 font-semibold uppercase tracking-wider text-[11px] text-right">Ações</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {mockProjects.filter(p => p.convenio === 'CONV-2024-001').map((project) => (
-                      <tr key={project.id} className="border-b border-blue-200 hover:bg-blue-100/50 transition-colors">
-                        <td className="px-4 py-4 font-mono text-blue-900">{project.convenio}</td>
-                        <td className="px-4 py-4 font-medium text-blue-900">{project.name}</td>
-                        <td className="px-4 py-4 text-blue-900">{formatCurrency(project.totalValue)}</td>
-                        <td className="px-4 py-4 text-center">
-                          <Badge className={cn("px-2 py-0.5", statusConfig[project.status as keyof typeof statusConfig]?.color)}>
-                            {statusConfig[project.status as keyof typeof statusConfig]?.label}
-                          </Badge>
-                        </td>
-                        <td className="px-4 py-4 text-right">
-                          <Button variant="ghost" size="icon" className="text-blue-600">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </CardContent>
-          </Card>
+            </div>
+
+            <div className="mt-6 space-y-4">
+              {priorityItems.map((item) => {
+                const Icon = item.icon
+                return (
+                  <div
+                    key={item.reference}
+                    className="flex flex-col gap-5 rounded-[24px] border border-slate-200 bg-white px-5 py-5 shadow-[0_1px_0_rgba(15,23,42,0.02)] lg:flex-row lg:items-center lg:justify-between"
+                  >
+                    <div className="flex flex-1 flex-col gap-4 lg:flex-row lg:items-center">
+                      <div className="min-w-[145px] border-b border-slate-200 pb-4 text-center lg:border-b-0 lg:border-r lg:pb-0 lg:pr-5 lg:text-left">
+                        <p className="text-[28px] font-semibold tracking-tight text-slate-900">{item.amount}</p>
+                        <p className="mt-1 text-sm text-slate-500">{item.reference}</p>
+                      </div>
+
+                      <div className="flex items-start gap-4">
+                        <div className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 ring-1 ring-blue-100">
+                          <Icon className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-semibold text-slate-900">{item.title}</h3>
+                          <p className="mt-1 text-sm text-slate-500">{item.category}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 self-start lg:self-auto">
+                      <Badge className={cn('rounded-full border px-4 py-2 text-sm font-medium', item.statusTone)}>
+                        {item.status}
+                      </Badge>
+                      <Button variant="outline" className="rounded-full border-slate-200 bg-white px-4 text-slate-700 hover:bg-slate-50">
+                        Revisar
+                      </Button>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </section>
         </main>
       </div>
     </div>
   )
 }
 
-function ArrowRight(props: any) {
+function StatCard({
+  icon: Icon,
+  label,
+  value,
+  footer,
+  footerTone = 'text-slate-500',
+}: {
+  icon: React.ComponentType<{ className?: string }>
+  label: string
+  value: string
+  footer: string
+  footerTone?: string
+}) {
   return (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    <div className="rounded-[28px] border border-slate-200 bg-white px-6 py-6 shadow-sm">
+      <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-50 text-slate-500 ring-1 ring-slate-100">
+        <Icon className="h-5 w-5" />
+      </div>
+      <p className="mt-5 text-sm font-medium tracking-wide text-slate-500">{label}</p>
+      <p className="mt-4 text-5xl font-semibold tracking-tight text-slate-900">{value}</p>
+      <p className={cn('mt-16 text-sm', footerTone)}>{footer}</p>
+    </div>
   )
 }

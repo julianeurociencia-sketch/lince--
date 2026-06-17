@@ -11,8 +11,11 @@ import {
   ShieldAlert,
   FileText,
   CheckCircle2,
+  ChevronRight,
   XCircle,
-  Calendar
+  Calendar,
+  ArrowRight,
+  AlertCircle
 } from 'lucide-react'
 import { Sidebar } from '@/components/sidebar'
 import { Header } from '@/components/header'
@@ -27,27 +30,51 @@ import { cn } from '@/lib/utils'
 const mockAlertas = [
   {
     id: '1',
-    tipo: 'Crítico',
-    descricao: 'Valor de rubrica "Equipamentos" excedido em 15%',
-    projeto: 'Modernização de Sistemas',
-    data: '21/05/2026',
+    titulo: 'Comprovante bancário não localizado',
+    referencia: 'NF 002-847',
+    descricao: 'O pagamento da correspondente não foi localizado no fluxo financeiro dos últimos trimestres.',
+    referenceManual: 'MANUAL 5.4.17 - PÁGINAS 115-116',
+    manualTopic: 'Equipamentos a Material Permanente',
+    detailedDescription: 'Logo em um manual não foi encontrado e a correspondente não foi localizado.',
+    prioridade: 'Crítica',
+    icon: 'arquivo',
     status: 'pendente'
   },
   {
     id: '2',
-    tipo: 'Médio',
-    descricao: 'Documento NF-902 apresenta data de emissão divergente',
-    projeto: 'Modernização de Sistemas',
-    data: '20/05/2026',
-    status: 'em_analise'
+    titulo: 'Despesa fora do período de execução',
+    referencia: 'NF 003-302',
+    descricao: 'A data de emissão está fora da vigência registrada para o projeto.',
+    referenceManual: 'MANUAL: ORIENTAÇÃO GERAL - PÁGINAS 68',
+    manualTopic: 'Validade do documento fiscal',
+    detailedDescription: 'Uma ou documento com data antes ou posterior ao período da aplicação dos recursos.',
+    prioridade: 'Crítica',
+    icon: 'documento',
+    status: 'pendente'
   },
   {
     id: '3',
-    tipo: 'Informativo',
-    descricao: 'Prazo para prestação de contas da Parcela 4 vence em 10 dias',
-    projeto: 'Modernização de Sistemas',
-    data: '19/05/2026',
-    status: 'novo'
+    titulo: 'Valor acima do previsto na rubrica',
+    referencia: 'NF 002-153',
+    descricao: 'O valor acumulado ultrapassa o limite planejado para a categoria.',
+    referenceManual: 'MANUAL 5.3.2.2 - PÁGINA 102',
+    manualTopic: 'Diárias e Ajuda de Custo',
+    detailedDescription: 'O valor do documento ultrapassa os limites fixados por modalidade e também guia de gastos.',
+    prioridade: 'Revisar',
+    icon: 'moeda',
+    status: 'em_analise'
+  },
+  {
+    id: '4',
+    titulo: 'Relatório detalhado de obra pendente',
+    referencia: 'NF 006-098',
+    descricao: 'Não foi encontrado o relatório dos serviços executado para fase da obra.',
+    referenceManual: 'MANUAL 5.4.1.7 - PÁGINA 156',
+    manualTopic: 'Documentação de Serviços',
+    detailedDescription: 'Etiqueta do equipamento e documentação de padrão referente não apresenta ou foi descumprida.',
+    prioridade: 'Revisar',
+    icon: 'documento',
+    status: 'em_analise'
   }
 ]
 
@@ -55,11 +82,34 @@ export default function DivergenciasPage() {
   const { state } = useSidebar()
   const isSidebarCollapsed = state === 'collapsed'
 
-  const getTipoColor = (tipo: string) => {
-    switch (tipo) {
-      case 'Crítico': return 'bg-red-100 text-red-700 border-red-200'
-      case 'Médio': return 'bg-amber-100 text-amber-700 border-amber-200'
-      default: return 'bg-blue-100 text-blue-700 border-blue-200'
+  const filtros = [
+    { id: 'todos', label: 'Todos', count: 4 },
+    { id: 'criticas', label: 'Críticas', count: 2 },
+    { id: 'revisar', label: 'Revisar', count: 2 },
+    { id: 'sem-virus', label: 'Sem-vírus', count: 0 }
+  ]
+
+  const getIconByType = (iconType: string) => {
+    switch (iconType) {
+      case 'arquivo':
+        return <FileText className="h-8 w-8" />
+      case 'documento':
+        return <AlertCircle className="h-8 w-8" />
+      case 'moeda':
+        return <ShieldAlert className="h-8 w-8" />
+      default:
+        return <AlertTriangle className="h-8 w-8" />
+    }
+  }
+
+  const getPriorityColor = (prioridade: string) => {
+    switch (prioridade) {
+      case 'Crítica':
+        return 'bg-red-100 text-red-700 border-red-200'
+      case 'Revisar':
+        return 'bg-amber-100 text-amber-700 border-amber-200'
+      default:
+        return 'bg-blue-100 text-blue-700 border-blue-200'
     }
   }
 
@@ -67,13 +117,13 @@ export default function DivergenciasPage() {
     <div className="min-h-screen w-full flex flex-col bg-blue-50 overflow-x-hidden">
       <Sidebar />
       
-      {/* Header Fixo - Título alterado para Divergências */}
-      <div className="fixed top-0 left-0 right-0 z-30 w-full bg-blue-900 shadow-lg">
+      {/* Header Fixo */}
+      <div className="fixed top-0 left-0 right-0 z-30 w-full bg-white shadow-sm">
         <div className={cn(
           "transition-all duration-300 ease-linear",
           isSidebarCollapsed ? "pl-[72px]" : "pl-[72px] lg:pl-[260px]"
         )}>
-          <Header title="Divergências" />
+          <Header title="" />
         </div>
       </div>
       
@@ -82,8 +132,13 @@ export default function DivergenciasPage() {
         isSidebarCollapsed ? "pl-[72px]" : "pl-[72px] lg:pl-[260px]"
         )}>
         <main className="p-6 space-y-6 w-full">
+          <nav className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            <span>Lince</span>
+            <ChevronRight size={12} className="text-slate-300" />
+            <span className="text-slate-900">Divergências</span>
+          </nav>
           
-          {/* Barra de Filtros */}
+          {/* Barra de Busca */}
           <div className="flex flex-wrap items-center gap-4">
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-blue-400" />
@@ -95,57 +150,86 @@ export default function DivergenciasPage() {
             </Button>
           </div>
 
-          {/* Stats em Azul Suave */}
-          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full">
-            <StatsCard title="Divergências Ativas" value="12" icon={AlertTriangle} />
-            <StatsCard title="Críticas" value="3" icon={ShieldAlert} />
-            <StatsCard title="Em Análise" value="5" icon={Clock} />
-            <StatsCard title="Resolvidas" value="24" icon={CheckCircle2} />
+          {/* Stats em 3 colunas */}
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-3 w-full">
+            <StatsCard title="Divergências Críticas" value="2" icon={AlertTriangle} />
+            <StatsCard title="Requerem revisão" value="3" icon={Clock} />
+            <StatsCard title="Com responsabilidade" value="1" icon={AlertTriangle} />
           </div>
 
-          {/* Lista de Divergências com fundo azul suave */}
-          <Card className="bg-[#ebf2ff] border-blue-100 shadow-sm w-full overflow-hidden">
-            <CardHeader className="border-b border-blue-200/50">
-              <CardTitle className="text-base font-bold text-blue-900">Gestão de Divergências Identificadas</CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm text-left">
-                  <thead className="bg-[#d6e4ff] text-blue-900">
-                    <tr>
-                      <th className="px-6 py-3 font-semibold uppercase tracking-wider text-[11px]">Tipo</th>
-                      <th className="px-6 py-3 font-semibold uppercase tracking-wider text-[11px]">Descrição</th>
-                      <th className="px-6 py-3 font-semibold uppercase tracking-wider text-[11px]">Data</th>
-                      <th className="px-6 py-3 font-semibold uppercase tracking-wider text-[11px] text-right">Ações</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-blue-200/50">
-                    {mockAlertas.map((alerta) => (
-                      <tr key={alerta.id} className="hover:bg-blue-200/30 transition-colors">
-                        <td className="px-6 py-4">
-                          <Badge className={cn("px-2 py-0.5 font-bold", getTipoColor(alerta.tipo))}>
-                            {alerta.tipo}
-                          </Badge>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex flex-col">
-                            <span className="font-medium text-blue-900">{alerta.descricao}</span>
-                            <span className="text-[10px] text-blue-500 uppercase font-bold">{alerta.projeto}</span>
+          {/* Mensagem de aviso */}
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 flex gap-3">
+            <AlertTriangle className="h-5 w-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-semibold text-yellow-900">Atenção</p>
+              <p className="text-sm text-yellow-800 mt-1">As divergências não resolvidas podem bloquear o envio do projeto. Revise e resolva-as com prioridade.</p>
+            </div>
+          </div>
+
+          {/* Lista de Divergências */}
+          <div className="space-y-4">
+            {/* Cards de Divergências */}
+            <div className="space-y-4">
+              {mockAlertas.map((alerta) => (
+                <Card key={alerta.id} className="border-l-4 border-l-red-500 bg-white hover:shadow-md transition-shadow">
+                  <CardContent className="p-6">
+                    <div className="flex gap-4">
+                      {/* Ícone */}
+                      <div className="flex-shrink-0 text-red-500 mt-1">
+                        {getIconByType(alerta.icon)}
+                      </div>
+
+                      {/* Conteúdo Principal */}
+                      <div className="flex-1">
+                        {/* Referência */}
+                        <div className="text-xs text-gray-500 font-mono mb-1">
+                          {alerta.referencia}
+                        </div>
+
+                        {/* Título */}
+                        <h3 className="font-semibold text-gray-900 mb-2">
+                          {alerta.titulo}
+                        </h3>
+
+                        {/* Descrição */}
+                        <p className="text-sm text-gray-600 mb-3">
+                          {alerta.descricao}
+                        </p>
+
+                        {/* Manual Reference Box */}
+                        <div className="bg-amber-50 border border-amber-200 rounded p-3 mb-3">
+                          <div className="text-xs text-amber-700 font-mono font-semibold mb-1">
+                            {alerta.referenceManual}
                           </div>
-                        </td>
-                        <td className="px-6 py-4 text-blue-600 font-mono text-xs">{alerta.data}</td>
-                        <td className="px-6 py-4 text-right">
-                          <Button variant="ghost" size="icon" className="text-blue-600">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </CardContent>
-          </Card>
+                          <div className="text-sm text-amber-800">
+                            {alerta.manualTopic}
+                          </div>
+                          <div className="text-xs text-amber-700 mt-1">
+                            {alerta.detailedDescription}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Lado direito: Badge e Botão */}
+                      <div className="flex flex-col items-end gap-3">
+                        <Badge className={cn("font-semibold px-3 py-1", getPriorityColor(alerta.prioridade))}>
+                          {alerta.prioridade}
+                        </Badge>
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 gap-1"
+                        >
+                          Revisar documentos
+                          <ArrowRight className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
         </main>
       </div>
     </div>

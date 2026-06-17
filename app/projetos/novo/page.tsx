@@ -152,7 +152,7 @@ export default function NovoProjetoPage() {
                   <div className="border-2 border-dashed border-blue-200 rounded-3xl p-12 bg-blue-50/30">
                     <Upload className="h-10 w-10 text-blue-400 mx-auto mb-4" />
                     <p className="text-blue-900 font-bold">Arraste os documentos do projeto</p>
-                    <p className="text-blue-400 text-xs mt-1 italic">Plano de Trabalho, Contratos, etc.</p>
+                    <p className="text-blue-400 text-xs mt-1 italic">Contratos, termos aditivos e outros anexos.</p>
                   </div>
                 </div>
               )}

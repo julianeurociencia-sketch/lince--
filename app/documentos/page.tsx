@@ -58,7 +58,7 @@ export default function DocumentosPage() {
           "transition-all duration-300 ease-linear",
           isSidebarCollapsed ? "pl-[72px]" : "pl-[72px] lg:pl-[260px]"
         )}>
-          <Header title="Documentos" />
+          <Header title="" />
         </div>
       </div>
       

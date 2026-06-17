@@ -11,6 +11,7 @@ import {
   File,
   ChevronRight,
   ChevronDown,
+  BarChart3,
   AlertTriangle,
   CheckCircle2,
   Clock,
@@ -87,6 +88,7 @@ const orphanDocuments = mockDocuments.filter(doc =>
 export default function OrganizacaoPage() {
   const { state } = useSidebar()
   const isSidebarCollapsed = state === 'collapsed'
+  const [activeTab, setActiveTab] = useState<'analise' | 'estrutura'>('analise')
 
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set(['pt-001', 'pt-002', 'pt-003']))
   const [searchQuery, setSearchQuery] = useState('')
@@ -212,7 +214,7 @@ export default function OrganizacaoPage() {
           "transition-all duration-300 ease-linear",
           isSidebarCollapsed ? "pl-[72px]" : "pl-[72px] lg:pl-[260px]"
         )}>
-          <Header title="Organização" />
+          <Header title="" />
         </div>
       </div>
       
@@ -267,7 +269,7 @@ export default function OrganizacaoPage() {
 
             <div className="space-y-6">
               <div className="bg-[#ebf2ff] rounded-xl border border-blue-200 p-6 shadow-sm">
-                <h3 className="font-semibold text-blue-900 mb-4">Resumo da Organização</h3>
+                <h3 className="font-semibold text-blue-900 mb-4">Resumo da Análise</h3>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-blue-700">Documentos classificados</span>

@@ -35,17 +35,17 @@ export function Header({ title, subtitle }: HeaderProps) {
       <div className="flex items-center gap-4">
         {/* Search */}
         <div className="relative hidden lg:block">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-blue-300" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input
             placeholder="Buscar projetos, documentos..."
-            className="w-72 pl-9 bg-blue-800/50 border-blue-700/50 text-white placeholder:text-blue-300 focus-visible:ring-blue-400"
+            className="w-80 pl-10 bg-gray-100/50 border-gray-200 text-gray-900 placeholder:text-gray-500 rounded-full focus-visible:ring-[#708D7A] border-none"
           />
         </div>
 
         {/* Notifications */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative text-white hover:bg-blue-800">
+            <Button variant="ghost" size="icon" className="relative text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-full">
               <Bell className="h-5 w-5" />
               <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-[10px] bg-blue-400 text-blue-900 border-2 border-blue-900">
                 3
@@ -66,13 +66,13 @@ export function Header({ title, subtitle }: HeaderProps) {
         {/* User Menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="gap-3 text-white hover:bg-blue-800 pl-2">
-              <Avatar className="h-8 w-8 border border-blue-700">
-                <AvatarFallback className="bg-blue-700 text-white text-xs">
+            <Button variant="ghost" className="gap-3 text-gray-700 hover:bg-gray-100 pl-2 rounded-full border border-gray-200">
+              <Avatar className="h-8 w-8 border border-gray-200">
+                <AvatarFallback className="bg-gray-200 text-gray-600 text-xs font-bold">
                   CA
                 </AvatarFallback>
               </Avatar>
-              <span className="hidden md:block text-sm font-medium text-white">Carlos Alberto</span>
+              <span className="hidden md:block text-sm font-semibold text-[#1F2937]">Carlos Alberto</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">

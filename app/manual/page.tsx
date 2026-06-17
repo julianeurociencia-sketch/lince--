@@ -40,6 +40,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
+import { useSidebar } from '@/components/ui/sidebar'
+import { cn } from '@/lib/utils'
 // Dados do Manual de Gestão Petrobras - Rubricas de Prestação de Contas
 const manualSections = [
   {
@@ -299,15 +301,24 @@ interface SubArtigo {
 
 export default function ManualPage() {
   const [searchTerm, setSearchTerm] = useState('')
-  const [expandedSections, setExpandedSections] = useState<string[]>(['passagens'])
+  const [expandedSections, setExpandedSections] = useState<string[]>(['passagens', 'diarias']) // Expandir algumas por padrão para visualização
   const [copiedId, setCopiedId] = useState<string | null>(null)
   const [bookmarked, setBookmarked] = useState<string[]>(['dia3', 'equip5'])
   const [selectedRubrica, setSelectedRubrica] = useState('all')
 
+  const { state } = useSidebar()
+  const isSidebarCollapsed = state === 'collapsed'
+
   const toggleSection = (id: string) => {
+    // Se a seção já estiver expandida, colapsa. Caso contrário, expande.
+    // Se você quiser que apenas uma seção fique expandida por vez, mude a lógica para:
+    // setExpandedSections(prev => prev.includes(id) ? [] : [id])
+    // Ou para expandir/colapsar individualmente:
     setExpandedSections(prev => 
       prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]
     )
+    // Se você quiser que a seção clicada seja a única expandida, use:
+    // setExpandedSections([id])
   }
 
   const copyToClipboard = (text: string, id: string) => {
@@ -355,16 +366,30 @@ export default function ManualPage() {
   }
 
   return (
-    <div className="min-h-screen bg-blue-50">
+    <div className="min-h-screen w-full flex flex-col bg-blue-50 overflow-x-hidden">
       <Sidebar />
       
-      <div className="lg:pl-[260px]">
-        <Header 
-          title="Manual de Gestão" 
-          subtitle="Regras de prestação de contas - Resolução ANP 918/2023" 
-        />
+      {/* Header Fixo */}
+      <div className="fixed top-0 left-0 right-0 z-30 w-full bg-white shadow-sm">
+        <div className={cn(
+          "transition-all duration-300 ease-linear",
+          isSidebarCollapsed ? "pl-[72px]" : "pl-[72px] lg:pl-[260px]"
+        )}>
+          <Header title="" />
+        </div>
+      </div>
+      
+      <div className={cn(
+        "flex-1 w-full pt-20 transition-all duration-300 ease-linear",
+        isSidebarCollapsed ? "pl-[72px]" : "pl-[72px] lg:pl-[260px]"
+      )}>
         
         <main className="p-6 space-y-6">
+          <nav className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            <span>Lince</span>
+            <ChevronRight size={12} className="text-slate-300" />
+            <span className="text-slate-900">Manual de Gestão</span>
+          </nav>
           {/* Filtros */}
           <div className="flex flex-wrap items-center gap-4">
             <Select value={selectedRubrica} onValueChange={setSelectedRubrica}>

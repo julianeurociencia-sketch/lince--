@@ -1,12 +1,12 @@
 'use client'
 
 import { 
-  LayoutDashboard, 
-  FileText, 
   Search, 
-  AlertTriangle, 
-  FolderTree, 
-  ClipboardCheck,
+  FileUp,
+  FilePlus,
+  BarChart3,
+  LayoutDashboard,
+  FolderTree,
   Settings,
   LogOut,
   ChevronLeft,
@@ -17,63 +17,50 @@ import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { useSidebar } from '@/components/ui/sidebar'
-import { useState, useEffect } from 'react'
 
 const menuItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
-  { icon: FileText, label: 'Meus Documentos', href: '/documentos' },
-  { icon: Search, label: 'Análises', href: '/analises' }, // Verifique se a pasta é 'analises' ou 'analise'
-  { icon: AlertTriangle, label: 'Divergências', href: '/divergencias' }, // Aponta para a pasta /divergencias
-  { icon: FolderTree, label: 'Organização', href: '/organizacao' },
-  { icon: ClipboardCheck, label: 'Prestação de Contas', href: '/auditoria' }, // Aponta para a pasta /auditoria
+  { icon: LayoutDashboard, label: 'Visão Geral', href: '/dashboard' },
+  { icon: FileUp, label: 'Upload de Notas', href: '/upload-notas' },
+  { icon: FilePlus, label: 'Plano de Trabalho', href: '/plano-trabalho' },
+  { icon: Search, label: 'Manual de Gestão', href: '/manual' },
+  { icon: BarChart3, label: 'Monitoramento', href: '/organizacao' },
 ]
 
 export function Sidebar() {
   const pathname = usePathname()
-  const sidebarContext = useSidebar()
-  const [isCollapsed, setIsCollapsed] = useState(false)
-
-  useEffect(() => {
-    // Verificar localStorage para manter o estado persistido
-    const saved = localStorage.getItem('sidebar-collapsed')
-    if (saved !== null) {
-      setIsCollapsed(JSON.parse(saved))
-    }
-  }, [])
+  const { state, toggleSidebar } = useSidebar()
+  const isCollapsed = state === 'collapsed'
 
   const handleToggle = () => {
-    const newState = !isCollapsed
-    setIsCollapsed(newState)
-    localStorage.setItem('sidebar-collapsed', JSON.stringify(newState))
+    toggleSidebar()
   }
 
   return (
     <aside 
       className={cn(
-        "fixed left-0 top-0 h-screen bg-blue-900 text-white transition-all duration-300 z-50 flex flex-col shadow-2xl",
+        "fixed left-0 top-0 h-screen bg-[#1F2937] text-white transition-all duration-300 z-50 flex flex-col shadow-xl",
         isCollapsed ? "w-[72px]" : "w-[260px]"
       )}
-      data-sidebar-state={isCollapsed ? 'collapsed' : 'expanded'}
     >
       {/* Logo Area */}
       <div className="p-6 flex items-center justify-between">
         {!isCollapsed && (
           <span className="text-2xl font-black tracking-tighter flex items-center gap-2">
-            LINCE
+            <span className="bg-gradient-to-br from-[#708D7A] to-[#8FA798] bg-clip-text text-transparent">LINCE</span>
           </span>
         )}
         <Button 
           variant="ghost" 
           size="icon" 
           onClick={handleToggle}
-          className="text-white hover:bg-blue-800 ml-auto"
+          className="text-gray-400 hover:text-white hover:bg-gray-800 ml-auto"
         >
           {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
         </Button>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 space-y-1">
+      <nav className="flex-1 px-4 space-y-2 mt-4">
         {menuItems.map((item) => {
           const isActive = pathname === item.href
           return (
@@ -81,13 +68,13 @@ export function Sidebar() {
               key={item.label}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 px-3 py-3 rounded-lg transition-all group relative",
+                "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group relative text-sm font-medium",
                 isActive 
-                  ? "bg-blue-600 text-white shadow-lg" 
-                  : "text-blue-100 hover:bg-blue-800 hover:text-white"
+                  ? "bg-[#708D7A] text-white shadow-md shadow-[#708D7A]/20" 
+                  : "text-gray-400 hover:text-white hover:bg-gray-800"
               )}
             >
-              <item.icon size={22} className={cn("shrink-0", isActive ? "text-white" : "text-blue-300 group-hover:text-white")} />
+              <item.icon size={20} className={cn("shrink-0", isActive ? "text-white" : "text-gray-500 group-hover:text-gray-300")} />
               {!isCollapsed && <span className="font-medium">{item.label}</span>}
               
               {isCollapsed && (

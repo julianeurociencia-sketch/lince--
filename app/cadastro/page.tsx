@@ -13,7 +13,6 @@ import {
   Lock, 
   Eye, 
   EyeOff,
-  Upload,
   ArrowLeft
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -151,16 +150,6 @@ export default function RegistroPage() {
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-blue-400" />
                 <Input type="password" placeholder="********" className="pl-12 h-14 bg-slate-100/50 border-none rounded-2xl" />
               </div>
-            </div>
-          </div>
-
-          {/* Upload Plano de Trabalho */}
-          <div className="space-y-2">
-            <Label className="text-[#1e3a8a] font-bold text-xs uppercase ml-1">Plano de Trabalho</Label>
-            <div className="border-2 border-dashed border-blue-200 rounded-[24px] p-8 text-center bg-blue-50/30 hover:bg-blue-50 transition-colors cursor-pointer group">
-              <Upload className="h-8 w-8 text-blue-400 mx-auto mb-2 group-hover:scale-110 transition-transform" />
-              <p className="text-blue-900 font-bold text-sm">Clique para anexar o plano de trabalho</p>
-              <p className="text-blue-400 text-[11px] mt-1 italic uppercase font-bold tracking-widest">PDF, Word, Excel ou CSV</p>
             </div>
           </div>
 
