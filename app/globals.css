@@ -4,15 +4,105 @@
   --color-background: oklch(0.98 0.002 240);
   --color-foreground: oklch(0.15 0.02 240);
   --color-card: #ffffff;
-  --color-primary: #1e3a8a; /* Azul Petrobras */
+  --color-primary: #1e3a8a;
   --color-accent: #0ea5e9;
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-destructive: #ef4444;
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-poppins);
+  --font-display: var(--font-raleway);
 }
 
 @layer base {
   body {
     @apply bg-background text-foreground antialiased;
+    font-family: var(--font-inter);
+    letter-spacing: 0.3px;
+  }
+
+  h1 {
+    @apply font-heading font-black tracking-tight;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    font-weight: 900;
+  }
+
+  h2 {
+    @apply font-heading font-bold tracking-tight;
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    line-height: 1.2;
+    font-weight: 800;
+  }
+
+  h3 {
+    @apply font-heading font-bold;
+    font-size: clamp(1.25rem, 3vw, 1.875rem);
+    line-height: 1.3;
+    font-weight: 700;
+  }
+
+  h4 {
+    @apply font-heading font-semibold;
+    font-size: 1.125rem;
+    line-height: 1.4;
+    font-weight: 600;
+  }
+
+  h5 {
+    @apply font-display font-semibold;
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: 600;
+  }
+
+  h6 {
+    @apply font-display font-medium;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+
+  p {
+    @apply font-sans;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  small {
+    @apply font-sans text-sm;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  a {
+    @apply transition-colors duration-200 hover:text-primary;
+  }
+
+  button {
+    @apply font-semibold transition-all duration-200;
+    font-family: var(--font-poppins);
+    letter-spacing: 0.5px;
+  }
+
+  label {
+    @apply font-sans font-semibold text-sm;
+    letter-spacing: 0.4px;
+  }
+
+  input,
+  textarea,
+  select {
+    @apply font-sans;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  code,
+  pre {
+    @apply font-mono;
+    font-size: 0.875rem;
+    line-height: 1.5;
   }
 }

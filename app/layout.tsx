@@ -1,18 +1,26 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Geist_Mono } from 'next/font/google'
+import { Inter, Poppins, Raleway } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { Toaster } from '@/components/ui/sonner'
-import { SidebarProvider } from '@/components/ui/sidebar' // <-- Importação do Provider adicionada
+import { SidebarProvider } from '@/components/ui/sidebar'
 import './globals.css'
 
 const inter = Inter({ 
   subsets: ["latin"],
-  variable: '--font-inter'
+  variable: '--font-inter',
+  weight: ['400', '500', '600', '700', '800']
 })
 
-const geistMono = Geist_Mono({ 
+const poppins = Poppins({
   subsets: ["latin"],
-  variable: '--font-geist-mono'
+  variable: '--font-poppins',
+  weight: ['400', '500', '600', '700', '800', '900']
+})
+
+const raleway = Raleway({
+  subsets: ["latin"],
+  variable: '--font-raleway',
+  weight: ['400', '500', '600', '700', '800']
 })
 
 export const metadata: Metadata = {
@@ -37,9 +45,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${geistMono.variable} dark`}>
+    <html lang="pt-BR" className={`${inter.variable} ${poppins.variable} ${raleway.variable} dark`}>
       <body className="font-sans antialiased bg-background">
-        {/* Envolvendo a aplicação inteira com o SidebarProvider */}
         <SidebarProvider>
           {children}
         </SidebarProvider>
