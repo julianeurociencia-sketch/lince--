@@ -10,7 +10,11 @@ import {
   Settings,
   LogOut,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  AlertTriangle,
+  BookOpen,
+  UserPlus,
+  LogIn
 } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
@@ -19,11 +23,14 @@ import { Button } from '@/components/ui/button'
 import { useSidebar } from '@/components/ui/sidebar'
 
 const menuItems = [
+  { icon: LogIn, label: 'Login', href: '/' },
+  { icon: UserPlus, label: 'Cadastro', href: '/cadastro' },
   { icon: LayoutDashboard, label: 'Visão Geral', href: '/dashboard' },
   { icon: FileUp, label: 'Upload de Notas', href: '/upload-notas' },
   { icon: FilePlus, label: 'Plano de Trabalho', href: '/plano-trabalho' },
-  { icon: Search, label: 'Manual de Gestão', href: '/manual' },
+  { icon: BookOpen, label: 'Manual de Gestão', href: '/manual' },
   { icon: BarChart3, label: 'Monitoramento', href: '/organizacao' },
+  { icon: AlertTriangle, label: 'Divergências', href: '/divergencias' },
 ]
 
 export function Sidebar() {
