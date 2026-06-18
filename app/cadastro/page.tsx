@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { ChangeEvent, FormEvent, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { 
@@ -32,9 +32,25 @@ import {
   getPasswordStrength
 } from '@/lib/validations'
 
+type CadastroFormData = {
+  fullName: string
+  email: string
+  cpf: string
+  phone: string
+  institution: string
+  projectName: string
+  projectCode: string
+  startDate: string
+  endDate: string
+  password: string
+  confirmPassword: string
+}
+
+type CadastroFormErrors = Partial<Record<keyof CadastroFormData | 'form', string>>
+
 export default function CadastroPage() {
   const router = useRouter()
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CadastroFormData>({
     fullName: '',
     email: '',
     cpf: '',
@@ -47,27 +63,27 @@ export default function CadastroPage() {
     password: '',
     confirmPassword: ''
   })
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState<CadastroFormErrors>({})
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-  const handleCPFChange = (value) => {
+  const handleCPFChange = (value: string) => {
     const masked = maskCPF(value)
     setFormData({ ...formData, cpf: masked })
   }
 
-  const handlePhoneChange = (value) => {
+  const handlePhoneChange = (value: string) => {
     const masked = maskPhone(value)
     setFormData({ ...formData, phone: masked })
   }
 
-  const handlePasswordChange = (value) => {
+  const handlePasswordChange = (value: string) => {
     setFormData({ ...formData, password: value })
   }
 
   const validateForm = () => {
-    const newErrors = {}
+    const newErrors: CadastroFormErrors = {}
 
     if (!formData.fullName.trim()) {
       newErrors.fullName = 'Nome completo é obrigatório'
@@ -117,7 +133,7 @@ export default function CadastroPage() {
     return newErrors
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const newErrors = validateForm()
 
@@ -146,14 +162,14 @@ export default function CadastroPage() {
       await new Promise(resolve => setTimeout(resolve, 1500))
 
       router.push('/dashboard')
-    } catch (error) {
+    } catch {
       setErrors({ form: 'Erro ao criar conta. Tente novamente.' })
     } finally {
       setIsLoading(false)
     }
   }
 
-  const passwordStrength = getPasswordStrength()
+  const passwordStrength = getPasswordStrength(formData.password)
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 via-slate-50 to-slate-100 flex flex-col items-center justify-center p-4 py-12">
@@ -173,7 +189,7 @@ export default function CadastroPage() {
                   placeholder="Seu nome completo" 
                   className="pl-12 h-12 bg-slate-50 border border-slate-200 text-slate-900 rounded-xl focus-visible:ring-2 focus-visible:ring-[#708D7A]/50 focus-visible:border-[#708D7A] focus-visible:bg-white transition-all"
                   value={formData.fullName}
-                  onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, fullName: e.target.value })}
                 />
               </div>
               {errors.fullName && <p className="text-xs text-red-500 font-medium mt-1"><AlertCircle className="inline mr-1" size={14} /> {errors.fullName}</p>}
@@ -188,7 +204,7 @@ export default function CadastroPage() {
                   placeholder="seu@email.com" 
                   className="pl-12 h-12 bg-slate-50 border border-slate-200 text-slate-900 rounded-xl focus-visible:ring-2 focus-visible:ring-[#708D7A]/50 focus-visible:border-[#708D7A] focus-visible:bg-white transition-all"
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, email: e.target.value })}
                 />
               </div>
               {errors.email && <p className="text-xs text-red-500 font-medium mt-1"><AlertCircle className="inline mr-1" size={14} /> {errors.email}</p>}
@@ -204,8 +220,8 @@ export default function CadastroPage() {
                   placeholder="000.000.000-00" 
                   className="pl-12 h-12 bg-slate-50 border border-slate-200 text-slate-900 rounded-xl focus-visible:ring-2 focus-visible:ring-[#708D7A]/50 focus-visible:border-[#708D7A] focus-visible:bg-white transition-all"
                   value={formData.cpf}
-                  onChange={(e) => handleCPFChange(e.target.value)}
-                  maxLength="14"
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => handleCPFChange(e.target.value)}
+                  maxLength={14}
                 />
               </div>
               {errors.cpf && <p className="text-xs text-red-500 font-medium mt-1"><AlertCircle className="inline mr-1" size={14} /> {errors.cpf}</p>}
@@ -218,8 +234,8 @@ export default function CadastroPage() {
                   placeholder="(00) 00000-0000" 
                   className="pl-12 h-12 bg-slate-50 border border-slate-200 text-slate-900 rounded-xl focus-visible:ring-2 focus-visible:ring-[#708D7A]/50 focus-visible:border-[#708D7A] focus-visible:bg-white transition-all"
                   value={formData.phone}
-                  onChange={(e) => handlePhoneChange(e.target.value)}
-                  maxLength="15"
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => handlePhoneChange(e.target.value)}
+                  maxLength={15}
                 />
               </div>
               {errors.phone && <p className="text-xs text-red-500 font-medium mt-1"><AlertCircle className="inline mr-1" size={14} /> {errors.phone}</p>}
@@ -234,7 +250,7 @@ export default function CadastroPage() {
                 placeholder="Nome da instituição" 
                 className="pl-12 h-12 bg-slate-50 border border-slate-200 text-slate-900 rounded-xl focus-visible:ring-2 focus-visible:ring-[#708D7A]/50 focus-visible:border-[#708D7A] focus-visible:bg-white transition-all"
                 value={formData.institution}
-                onChange={(e) => setFormData({ ...formData, institution: e.target.value })}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, institution: e.target.value })}
               />
             </div>
             {errors.institution && <p className="text-xs text-red-500 font-medium mt-1"><AlertCircle className="inline mr-1" size={14} /> {errors.institution}</p>}
@@ -249,7 +265,7 @@ export default function CadastroPage() {
                   placeholder="Nome do projeto" 
                   className="pl-12 h-12 bg-slate-50 border border-slate-200 text-slate-900 rounded-xl focus-visible:ring-2 focus-visible:ring-[#708D7A]/50 focus-visible:border-[#708D7A] focus-visible:bg-white transition-all"
                   value={formData.projectName}
-                  onChange={(e) => setFormData({ ...formData, projectName: e.target.value })}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, projectName: e.target.value })}
                 />
               </div>
               {errors.projectName && <p className="text-xs text-red-500 font-medium mt-1"><AlertCircle className="inline mr-1" size={14} /> {errors.projectName}</p>}
@@ -262,7 +278,7 @@ export default function CadastroPage() {
                   placeholder="Ex: PROJ-2024-001" 
                   className="pl-12 h-12 bg-slate-50 border border-slate-200 text-slate-900 rounded-xl focus-visible:ring-2 focus-visible:ring-[#708D7A]/50 focus-visible:border-[#708D7A] focus-visible:bg-white transition-all"
                   value={formData.projectCode}
-                  onChange={(e) => setFormData({ ...formData, projectCode: e.target.value })}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, projectCode: e.target.value })}
                 />
               </div>
               {errors.projectCode && <p className="text-xs text-red-500 font-medium mt-1"><AlertCircle className="inline mr-1" size={14} /> {errors.projectCode}</p>}
@@ -278,7 +294,7 @@ export default function CadastroPage() {
                   type="date" 
                   className="pl-12 h-12 bg-slate-50 border border-slate-200 text-slate-900 rounded-xl focus-visible:ring-2 focus-visible:ring-[#708D7A]/50 focus-visible:border-[#708D7A] focus-visible:bg-white transition-all"
                   value={formData.startDate}
-                  onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, startDate: e.target.value })}
                 />
               </div>
               {errors.startDate && <p className="text-xs text-red-500 font-medium mt-1"><AlertCircle className="inline mr-1" size={14} /> {errors.startDate}</p>}
@@ -291,7 +307,7 @@ export default function CadastroPage() {
                   type="date" 
                   className="pl-12 h-12 bg-slate-50 border border-slate-200 text-slate-900 rounded-xl focus-visible:ring-2 focus-visible:ring-[#708D7A]/50 focus-visible:border-[#708D7A] focus-visible:bg-white transition-all"
                   value={formData.endDate}
-                  onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, endDate: e.target.value })}
                 />
               </div>
               {errors.endDate && <p className="text-xs text-red-500 font-medium mt-1"><AlertCircle className="inline mr-1" size={14} /> {errors.endDate}</p>}
@@ -310,7 +326,7 @@ export default function CadastroPage() {
                   placeholder="Crie uma senha forte" 
                   className="pl-12 pr-10 h-12 bg-slate-50 border border-slate-200 text-slate-900 rounded-xl focus-visible:ring-2 focus-visible:ring-[#708D7A]/50 focus-visible:border-[#708D7A] focus-visible:bg-white transition-all"
                   value={formData.password}
-                  onChange={(e) => handlePasswordChange(e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => handlePasswordChange(e.target.value)}
                 />
                 <button 
                   type="button"
@@ -350,7 +366,7 @@ export default function CadastroPage() {
                   placeholder="Confirme sua senha" 
                   className="pl-12 pr-10 h-12 bg-slate-50 border border-slate-200 text-slate-900 rounded-xl focus-visible:ring-2 focus-visible:ring-[#708D7A]/50 focus-visible:border-[#708D7A] focus-visible:bg-white transition-all"
                   value={formData.confirmPassword}
-                  onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, confirmPassword: e.target.value })}
                 />
                 <button 
                   type="button"
