@@ -91,6 +91,21 @@ export const formatCPF = (cpf: string): string => {
     .replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
 }
 
+// Função para aplicar máscara de CPF enquanto digita
+export const maskCPF = (value: string): string => {
+  const cleanValue = value.replace(/\D/g, '')
+  
+  if (cleanValue.length <= 3) {
+    return cleanValue
+  } else if (cleanValue.length <= 6) {
+    return cleanValue.replace(/(\d{3})(\d+)/, '$1.$2')
+  } else if (cleanValue.length <= 9) {
+    return cleanValue.replace(/(\d{3})(\d{3})(\d+)/, '$1.$2.$3')
+  } else {
+    return cleanValue.slice(0, 11).replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
+  }
+}
+
 // Função auxiliar para formatar Telefone
 export const formatPhone = (phone: string): string => {
   const cleanPhone = phone.replace(/\D/g, '')
@@ -98,6 +113,21 @@ export const formatPhone = (phone: string): string => {
     return cleanPhone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
   }
   return cleanPhone.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3')
+}
+
+// Função para aplicar máscara de Telefone enquanto digita
+export const maskPhone = (value: string): string => {
+  const cleanValue = value.replace(/\D/g, '')
+  
+  if (cleanValue.length <= 2) {
+    return cleanValue
+  } else if (cleanValue.length <= 7) {
+    return cleanValue.replace(/(\d{2})(\d+)/, '($1) $2')
+  } else if (cleanValue.length <= 11) {
+    return cleanValue.replace(/(\d{2})(\d{5})(\d+)/, '($1) $2-$3')
+  } else {
+    return cleanValue.slice(0, 11).replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
+  }
 }
 
 // Validação básica de campo obrigatório
