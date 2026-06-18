@@ -170,7 +170,7 @@ export default function PlanoTrabalhoPage() {
                       <CloudUpload className="h-8 w-8" />
                     </div>
                     <p className="text-lg font-semibold text-slate-900">
-                      {isDragActive ? 'Solte o arquivo aqui' : 'Arraste o plano para ca ou clique para selecionar'}
+                      {isDragActive ? 'Solte o arquivo aqui' : 'Arraste o plano ou clique para selecionar'}
                     </p>
                     <p className="mt-2 text-xs text-slate-500">PDF, DOCX ou XLSX ate 10 MB</p>
                   </div>
