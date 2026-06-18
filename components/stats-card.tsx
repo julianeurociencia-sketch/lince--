@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { LucideIcon } from 'lucide-react'
 
@@ -23,45 +22,45 @@ export function StatsCard({
 }: StatsCardProps) {
   
   const variantColors = {
-    default: 'text-blue-600 bg-blue-50',
-    success: 'text-emerald-600 bg-emerald-50',
-    warning: 'text-amber-600 bg-amber-50',
-    destructive: 'text-red-600 bg-red-50',
-    accent: 'text-cyan-600 bg-cyan-50',
+    default: 'text-slate-500 bg-slate-50 ring-1 ring-slate-100',
+    success: 'text-emerald-600 bg-emerald-50 ring-1 ring-[#10B981]/10',
+    warning: 'text-amber-600 bg-amber-50 ring-1 ring-amber-100',
+    destructive: 'text-rose-600 bg-rose-50 ring-1 ring-rose-100',
+    accent: 'text-cyan-600 bg-cyan-50 ring-1 ring-cyan-100',
   }
 
   return (
-    <Card className={cn("bg-white border-blue-100 shadow-sm overflow-hidden", className)}>
-      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-        <CardTitle className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+    <div className={cn("rounded-[28px] border border-slate-200 bg-white px-6 py-6 shadow-sm flex flex-col justify-between", className)}>
+      <div className="flex items-center justify-between">
+        <p className="text-xs font-semibold tracking-wider text-slate-400 uppercase">
           {title}
-        </CardTitle>
-        <div className={cn("p-2 rounded-lg", variantColors[variant])}>
-          {/* Se o erro continuar, o problema está no arquivo da página (item 1 acima) */}
-          {Icon && <Icon className="h-4 w-4" />}
+        </p>
+        <div className={cn("flex h-10 w-10 items-center justify-center rounded-2xl", variantColors[variant])}>
+          {Icon && <Icon className="h-5 w-5" />}
         </div>
-      </CardHeader>
+      </div>
       
-      <CardContent className="pb-4">
-        <div className="text-2xl font-bold text-blue-900 tracking-tight">
+      <div className="mt-5">
+        <p className="text-3xl font-semibold tracking-tight text-slate-900">
           {value}
-        </div>
+        </p>
+        
         {description && (
-          <div className="text-sm text-slate-500 mt-1">
+          <p className="text-xs text-slate-400 mt-2 font-medium">
             {description}
-          </div>
+          </p>
         )}
         
         {trend && (
           <div className={cn(
-            "text-[11px] mt-1.5 font-semibold flex items-center gap-1",
-            trend.isPositive ? "text-emerald-600" : "text-red-500"
+            "text-xs mt-2 font-bold flex items-center gap-1",
+            trend.isPositive ? "text-emerald-600" : "text-rose-600"
           )}>
             <span>{trend.isPositive ? "+" : "-"}{trend.value}%</span>
             <span className="text-slate-400 font-normal">vs mês anterior</span>
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

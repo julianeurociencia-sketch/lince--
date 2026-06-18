@@ -10,8 +10,7 @@ import {
   BadgeCheck,
   Layers3,
   Wallet,
-  CalendarDays,
-  ChevronRight
+  CalendarDays, ChevronRight,
 } from 'lucide-react'
 
 export default function PlanoTrabalhoPage() {
@@ -19,28 +18,38 @@ export default function PlanoTrabalhoPage() {
   const isSidebarCollapsed = state === 'collapsed'
 
   return (
-    <div className="min-h-screen w-full flex flex-col bg-blue-50 overflow-x-hidden">
+    <div
+      className="min-h-screen w-full flex flex-col bg-[#F5F3EF] overflow-x-hidden"
+      // Adjusted background color for consistency with dashboard
+    >
       <Sidebar />
 
-      <div className="fixed top-0 left-0 right-0 z-30 w-full bg-blue-900 shadow-lg">
+      <div className="fixed top-0 left-0 right-0 z-30 w-full bg-white shadow-sm">
         <div
           className={cn(
             'transition-all duration-300 ease-linear',
             isSidebarCollapsed ? 'pl-[72px]' : 'pl-[72px] lg:pl-[260px]'
-          )}
+          )} // Kept fixed header styling
         >
-          <Header title="" />
+          <Header title=""/>
         </div>
       </div>
 
       <div
         className={cn(
-          'flex-1 w-full pt-20 transition-all duration-300 ease-linear',
+          'flex-1 w-full pt-24 transition-all duration-300 ease-linear', // Adjusted padding-top and added spacing/max-width for main content
           isSidebarCollapsed ? 'pl-[72px]' : 'pl-[72px] lg:pl-[260px]'
         )}
       >
-        <main className="p-6 space-y-6 w-full">
-          <div className="flex flex-wrap items-start justify-end gap-4 border-b border-slate-200 pb-6">
+        <main className="space-y-8 p-8 w-full max-w-7xl mx-auto">
+          <nav className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            <span>Lince</span>
+            <ChevronRight size={12} className="text-slate-300"/>
+            <span className="text-slate-900">Plano de Trabalho</span>
+          </nav>
+          <section
+            className="rounded-[24px] bg-white p-8 shadow-[0_4px_20px_rgba(0,0,0,0.05)]" // Consistent section styling
+          >
 
             <div className="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 shadow-sm">
               <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -48,21 +57,23 @@ export default function PlanoTrabalhoPage() {
                 Projeto atual: <span className="text-gray-900">Programa Energia do Futuro</span>
               </span>
             </div>
-          </div>
+          </section>
 
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1.95fr)_minmax(320px,1fr)]">
             <div className="space-y-6">
-              <section className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+              <section
+                className="rounded-[24px] bg-white p-8 shadow-[0_4px_20px_rgba(0,0,0,0.05)]" // Consistent section styling
+              >
                 <div className="mb-6">
-                  <h3 className="text-lg font-bold text-slate-900">Enviar plano de trabalho</h3>
-                  <p className="mt-3 text-sm text-gray-500">
+                  <h3 className="text-xl font-bold text-slate-900">Enviar plano de trabalho</h3>
+                  <p className="mt-2 text-sm text-slate-500">
                     O documento será usado como referência para cruzar todas as despesas do projeto.
                   </p>
                 </div>
 
                 <div className="flex min-h-[214px] cursor-pointer items-center justify-center rounded-[22px] border-2 border-dashed border-slate-200 bg-slate-50/80 p-12 text-center transition-colors hover:bg-slate-50 group">
                   <div>
-                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100 transition-transform group-hover:scale-110">
+                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
                       <CloudUpload className="h-8 w-8" />
                     </div>
                     <p className="text-lg font-semibold text-slate-900">Arraste o plano para cá</p>
@@ -71,9 +82,9 @@ export default function PlanoTrabalhoPage() {
                 </div>
               </section>
 
-              <section className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+              <section className="rounded-[24px] bg-white p-8 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
                 <div className="flex items-center justify-center py-8">
-                  <div className="w-full max-w-xl rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-sm">
+                  <div className="w-full max-w-xl rounded-[24px] border border-slate-200 bg-white p-8 text-center shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
                     <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100">
                       <FileText size={22} />
                     </div>
@@ -89,7 +100,7 @@ export default function PlanoTrabalhoPage() {
             </div>
 
             <div className="space-y-6">
-              <section className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+              <section className="rounded-[24px] bg-white p-8 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
                 <h3 className="text-lg font-bold text-slate-900">Dados identificados</h3>
                 <p className="mb-6 mt-3 text-sm text-gray-500">Resumo extraído do plano vigente</p>
 
@@ -100,7 +111,7 @@ export default function PlanoTrabalhoPage() {
                 </div>
               </section>
 
-              <section className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+              <section className="rounded-[24px] bg-white p-8 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
                 <h3 className="text-lg font-bold text-slate-900">Rubricas e limites</h3>
                 <div className="mt-6 space-y-4">
                   <LimitBar label="Equipamentos e material permanente" value="R$ 150.000,00" percent={82} />

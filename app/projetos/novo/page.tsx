@@ -71,98 +71,121 @@ export default function NovoProjetoPage() {
     router.push('/dashboard')
   }
 
+  const isSidebarCollapsed = state === 'collapsed'
+
   return (
-    <div className="min-h-screen bg-blue-50/50 flex overflow-x-hidden">
+    <div className="min-h-screen bg-[#F5F3EF] flex overflow-x-hidden">
       <Sidebar />
       
+      {/* Header Fixo */}
+      <div className="fixed top-0 left-0 right-0 z-30 w-full bg-white shadow-sm">
+        <div className={cn(
+          "transition-all duration-300 ease-linear",
+          isSidebarCollapsed ? "pl-[72px]" : "pl-[72px] lg:pl-[260px]"
+        )}>
+          <Header title="" />
+        </div>
+      </div>
+      
       <div className={cn(
-        "flex-1 flex flex-col min-w-0 transition-all duration-300",
-        state === 'collapsed' ? "pl-[72px]" : "pl-[72px] lg:pl-[260px]"
+        "flex-1 flex flex-col min-w-0 pt-24 transition-all duration-300 ease-linear",
+        isSidebarCollapsed ? "pl-[72px]" : "pl-[72px] lg:pl-[260px]"
       )}>
-        <Header title="Cadastro de Projeto" subtitle="Manual de PD&I Petrobras" />
-        
-        <main className="p-6 max-w-5xl mx-auto w-full space-y-8">
-          {/* Stepper Vertical/Horizontal */}
-          <div className="flex justify-between items-center mb-10">
+        <main className="space-y-8 p-8 w-full max-w-5xl mx-auto">
+          <nav className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            <span>Lince</span>
+            <ArrowRight size={12} className="text-slate-300" />
+            <span className="text-slate-900">Novo Projeto</span>
+          </nav>
+          
+          {/* Stepper */}
+          <div className="flex justify-between items-center mb-10 bg-white p-6 rounded-[24px] shadow-[0_4px_20px_rgba(0,0,0,0.02)] border border-slate-100/50">
             {steps.map((step) => (
               <div key={step.id} className="flex flex-col items-center flex-1 relative">
                 <div className={cn(
-                  "w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all z-10",
-                  currentStep >= step.id ? "bg-blue-600 border-blue-600 text-white" : "bg-white border-slate-200 text-slate-400"
+                  "w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all z-10 font-semibold",
+                  currentStep === step.id ? "bg-[#708D7A] border-[#708D7A] text-white shadow-md shadow-[#708D7A]/20" :
+                  currentStep > step.id ? "bg-emerald-50 border-emerald-50 text-emerald-600" : "bg-white border-slate-200 text-slate-400"
                 )}>
                   {currentStep > step.id ? <CheckCircle2 className="h-6 w-6" /> : step.id}
                 </div>
-                <span className={cn("text-[10px] uppercase font-bold mt-2", currentStep >= step.id ? "text-blue-600" : "text-slate-400")}>
+                <span className={cn("text-[10px] uppercase font-bold mt-2 tracking-wider", currentStep >= step.id ? "text-slate-900" : "text-slate-400")}>
                   {step.name}
                 </span>
               </div>
             ))}
           </div>
 
-          <Card className="border-none shadow-sm rounded-3xl overflow-hidden bg-white">
-            <CardContent className="p-8">
-              {currentStep === 1 && (
-                <div className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label>Nome do Projeto</Label>
-                      <Input value={formData.nomeProjeto} onChange={(e) => updateFormData('nomeProjeto', e.target.value)} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Número do Convênio</Label>
-                      <Input value={formData.numeroConvenio} onChange={(e) => updateFormData('numeroConvenio', e.target.value)} />
-                    </div>
+          <div className="rounded-[24px] bg-white p-8 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border-0 overflow-hidden">
+            {currentStep === 1 && (
+              <div className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label className="text-slate-700 font-bold text-xs uppercase ml-1">Nome do Projeto</Label>
+                    <Input value={formData.nomeProjeto} onChange={(e) => updateFormData('nomeProjeto', e.target.value)} className="h-12 border-slate-200 focus-visible:ring-slate-300 rounded-xl" />
                   </div>
                   <div className="space-y-2">
-                    <Label>Área</Label>
-                    <Select onValueChange={(v) => updateFormData('area', v)}>
-                      <SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger>
-                      <SelectContent>{areas.map(a => <SelectItem key={a} value={a}>{a}</SelectItem>)}</SelectContent>
-                    </Select>
+                    <Label className="text-slate-700 font-bold text-xs uppercase ml-1">Número do Convênio</Label>
+                    <Input value={formData.numeroConvenio} onChange={(e) => updateFormData('numeroConvenio', e.target.value)} className="h-12 border-slate-200 focus-visible:ring-slate-300 rounded-xl" />
                   </div>
                 </div>
-              )}
+                <div className="space-y-2">
+                  <Label className="text-slate-700 font-bold text-xs uppercase ml-1">Área</Label>
+                  <Select onValueChange={(v) => updateFormData('area', v)}>
+                    <SelectTrigger className="h-12 border-slate-200 focus-visible:ring-slate-300 rounded-xl"><SelectValue placeholder="Selecione..." /></SelectTrigger>
+                    <SelectContent className="bg-white border-slate-200 rounded-xl">{areas.map(a => <SelectItem key={a} value={a} className="cursor-pointer">{a}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+              </div>
+            )}
 
-              {currentStep === 2 && (
-                <div className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-2"><Label>Responsável</Label><Input value={formData.nomeResponsavel} onChange={(e) => updateFormData('nomeResponsavel', e.target.value)} /></div>
-                    <div className="space-y-2"><Label>CPF/CNPJ</Label><Input value={formData.cpfCnpj} onChange={(e) => updateFormData('cpfCnpj', formatCPFCNPJ(e.target.value))} /></div>
+            {currentStep === 2 && (
+              <div className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label className="text-slate-700 font-bold text-xs uppercase ml-1">Responsável</Label>
+                    <Input value={formData.nomeResponsavel} onChange={(e) => updateFormData('nomeResponsavel', e.target.value)} className="h-12 border-slate-200 focus-visible:ring-slate-300 rounded-xl" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-slate-700 font-bold text-xs uppercase ml-1">CPF/CNPJ</Label>
+                    <Input value={formData.cpfCnpj} onChange={(e) => updateFormData('cpfCnpj', formatCPFCNPJ(e.target.value))} className="h-12 border-slate-200 focus-visible:ring-slate-300 rounded-xl" />
                   </div>
                 </div>
-              )}
+              </div>
+            )}
 
-              {currentStep === 3 && (
-                <div className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label>Valor Total</Label>
-                      <Input value={formData.valorTotal} onChange={(e) => updateFormData('valorTotal', formatCurrency(e.target.value))} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Parcelas</Label>
-                      <Input type="number" value={formData.numeroParcelas} onChange={(e) => updateFormData('numeroParcelas', e.target.value)} />
-                    </div>
+            {currentStep === 3 && (
+              <div className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label className="text-slate-700 font-bold text-xs uppercase ml-1">Valor Total</Label>
+                    <Input value={formData.valorTotal} onChange={(e) => updateFormData('valorTotal', formatCurrency(e.target.value))} className="h-12 border-slate-200 focus-visible:ring-slate-300 rounded-xl" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-slate-700 font-bold text-xs uppercase ml-1">Parcelas</Label>
+                    <Input type="number" value={formData.numeroParcelas} onChange={(e) => updateFormData('numeroParcelas', e.target.value)} className="h-12 border-slate-200 focus-visible:ring-slate-300 rounded-xl" />
                   </div>
                 </div>
-              )}
+              </div>
+            )}
 
-              {currentStep === 4 && (
-                <div className="space-y-6 text-center">
-                  <div className="border-2 border-dashed border-blue-200 rounded-3xl p-12 bg-blue-50/30">
-                    <Upload className="h-10 w-10 text-blue-400 mx-auto mb-4" />
-                    <p className="text-blue-900 font-bold">Arraste os documentos do projeto</p>
-                    <p className="text-blue-400 text-xs mt-1 italic">Contratos, termos aditivos e outros anexos.</p>
+            {currentStep === 4 && (
+              <div className="space-y-6 text-center">
+                <div className="rounded-[22px] border-2 border-dashed border-slate-200 bg-slate-50/80 px-6 py-16 text-center cursor-pointer hover:bg-slate-50 transition-all group">
+                  <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-white text-[#708D7A] shadow-sm border border-slate-100 group-hover:scale-110 transition-transform">
+                    <Upload className="h-10 w-10" />
                   </div>
+                  <p className="text-lg font-bold text-slate-900">Arraste os documentos do projeto</p>
+                  <p className="mt-2 text-sm text-slate-400 font-medium">Contratos, termos aditivos e outros anexos.</p>
                 </div>
-              )}
-            </CardContent>
-          </Card>
+              </div>
+            )}
+          </div>
 
           <div className="flex justify-between items-center pt-4">
-            <Button variant="ghost" onClick={() => setCurrentStep(prev => prev - 1)} disabled={currentStep === 1}>Voltar</Button>
+            <Button variant="ghost" onClick={() => setCurrentStep(prev => prev - 1)} disabled={currentStep === 1} className="text-slate-500 hover:text-slate-900 cursor-pointer">Voltar</Button>
             <Button 
-              className="bg-blue-600 hover:bg-blue-700 px-10 rounded-xl font-bold h-12"
+              className="bg-[#708D7A] hover:bg-[#708D7A]/90 text-white font-semibold px-10 rounded-xl h-12 cursor-pointer shadow-sm"
               onClick={() => currentStep === 4 ? handleSubmit() : setCurrentStep(prev => prev + 1)}
             >
               {isSubmitting ? 'Processando...' : currentStep === 4 ? 'Finalizar' : 'Continuar'}

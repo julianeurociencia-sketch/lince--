@@ -356,17 +356,17 @@ export default function ManualPage() {
 
   const getIconColor = (cor: string) => {
     const colors: Record<string, string> = {
-      blue: 'text-blue-600 bg-blue-100',
-      amber: 'text-amber-600 bg-amber-100',
-      emerald: 'text-emerald-600 bg-emerald-100',
-      purple: 'text-purple-600 bg-purple-100',
-      cyan: 'text-cyan-600 bg-cyan-100'
+      blue: 'text-blue-600 bg-blue-50 ring-1 ring-blue-100/50',
+      amber: 'text-amber-600 bg-amber-50 ring-1 ring-amber-100/50',
+      emerald: 'text-emerald-600 bg-emerald-50 ring-1 ring-emerald-100/50',
+      purple: 'text-purple-600 bg-purple-50 ring-1 ring-purple-100/50',
+      cyan: 'text-cyan-600 bg-cyan-50 ring-1 ring-cyan-100/50'
     }
-    return colors[cor] || 'text-blue-600 bg-blue-100'
+    return colors[cor] || 'text-blue-600 bg-blue-50 ring-1 ring-blue-100/50'
   }
 
   return (
-    <div className="min-h-screen w-full flex flex-col bg-blue-50 overflow-x-hidden">
+    <div className="min-h-screen w-full flex flex-col bg-[#F5F3EF] overflow-x-hidden">
       <Sidebar />
       
       {/* Header Fixo */}
@@ -380,24 +380,25 @@ export default function ManualPage() {
       </div>
       
       <div className={cn(
-        "flex-1 w-full pt-20 transition-all duration-300 ease-linear",
+        "flex-1 w-full pt-24 transition-all duration-300 ease-linear",
         isSidebarCollapsed ? "pl-[72px]" : "pl-[72px] lg:pl-[260px]"
       )}>
         
-        <main className="p-6 space-y-6">
+        <main className="space-y-8 p-8 w-full max-w-7xl mx-auto">
           <nav className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
             <span>Lince</span>
             <ChevronRight size={12} className="text-slate-300" />
             <span className="text-slate-900">Manual de Gestão</span>
           </nav>
+          
           {/* Filtros */}
           <div className="flex flex-wrap items-center gap-4">
             <Select value={selectedRubrica} onValueChange={setSelectedRubrica}>
-              <SelectTrigger className="w-56 bg-white border-blue-200">
-                <DollarSign className="h-4 w-4 mr-2 text-blue-600" />
+              <SelectTrigger className="w-56 bg-white border-slate-200 text-slate-700 shadow-sm rounded-xl">
+                <DollarSign className="h-4 w-4 mr-2 text-slate-500" />
                 <SelectValue placeholder="Rubrica" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white border-slate-200">
                 <SelectItem value="all">Todas as Rubricas</SelectItem>
                 <SelectItem value="passagens">Passagens e Locomoção</SelectItem>
                 <SelectItem value="diarias">Diárias e Ajuda de Custo</SelectItem>
@@ -407,21 +408,21 @@ export default function ManualPage() {
               </SelectContent>
             </Select>
             
-            <Button variant="outline" className="border-blue-200 text-blue-700">
-              <Filter className="h-4 w-4 mr-2" />
+            <Button variant="outline" className="border-slate-200 text-slate-700 bg-white hover:bg-slate-50 shadow-sm rounded-xl">
+              <Filter className="h-4 w-4 mr-2 text-slate-500" />
               Filtros
             </Button>
 
             <div className="ml-auto">
-              <Button variant="outline" className="border-blue-200 text-blue-700">
-                <ExternalLink className="h-4 w-4 mr-2" />
+              <Button variant="outline" className="border-slate-200 text-slate-700 bg-white hover:bg-slate-50 shadow-sm rounded-xl">
+                <ExternalLink className="h-4 w-4 mr-2 text-slate-500" />
                 Baixar Manual Completo
               </Button>
             </div>
           </div>
 
           {/* Cards de Estatísticas */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <StatsCard
               title="Rubricas Cobertas"
               value={manualSections.length.toString()}
@@ -437,28 +438,30 @@ export default function ManualPage() {
               value={artigosDestaque.toString()}
               icon={AlertTriangle}
               description="Atenção especial"
+              variant="warning"
             />
             <StatsCard
               title="Marcados"
               value={bookmarked.length.toString()}
               icon={Bookmark}
               description="Seus favoritos"
+              variant="success"
             />
           </div>
 
           {/* Busca */}
-          <div className="bg-blue-100/80 rounded-xl border border-blue-200 p-4">
+          <div className="rounded-[24px] bg-white p-6 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border-0">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-blue-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
               <Input
                 placeholder="Buscar no manual... (ex: diárias, nota fiscal, R$ 50 mil)"
-                className="pl-10 h-12 bg-white border-blue-200"
+                className="pl-10 h-12 bg-white border-slate-200 focus-visible:ring-slate-300 rounded-xl"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             {searchTerm && (
-              <p className="text-sm text-blue-600 mt-2">
+              <p className="text-xs text-slate-500 mt-2 font-medium">
                 {filteredSections.length} rubrica(s) encontrada(s) com {filteredSections.reduce((acc, s) => acc + s.artigos.length, 0)} regras
               </p>
             )}
@@ -473,10 +476,10 @@ export default function ManualPage() {
                 <button
                   key={section.id}
                   onClick={() => setSelectedRubrica(isActive ? 'all' : section.id)}
-                  className={`p-4 rounded-xl border transition-all text-left ${
+                  className={`p-4 rounded-2xl border transition-all text-left cursor-pointer shadow-sm ${
                     isActive 
-                      ? 'bg-blue-600 border-blue-600 text-white' 
-                      : 'bg-blue-100/80 border-blue-200 hover:border-blue-400'
+                      ? 'bg-[#708D7A] border-[#708D7A] text-white shadow-[#708D7A]/10 shadow-lg' 
+                      : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700'
                   }`}
                 >
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-3 ${
@@ -484,10 +487,10 @@ export default function ManualPage() {
                   }`}>
                     <Icon className={`h-5 w-5 ${isActive ? 'text-white' : ''}`} />
                   </div>
-                  <h3 className={`font-medium text-sm ${isActive ? 'text-white' : 'text-blue-900'}`}>
+                  <h3 className={`font-semibold text-sm ${isActive ? 'text-white' : 'text-slate-900'}`}>
                     {section.titulo}
                   </h3>
-                  <p className={`text-xs mt-1 ${isActive ? 'text-blue-100' : 'text-blue-600'}`}>
+                  <p className={`text-xs mt-1 font-medium ${isActive ? 'text-slate-100' : 'text-slate-400'}`}>
                     {section.artigos.length} regras
                   </p>
                 </button>
@@ -496,44 +499,44 @@ export default function ManualPage() {
           </div>
 
           {/* Conteúdo do Manual */}
-          <div className="bg-blue-100/80 rounded-xl border border-blue-200">
-            <div className="p-4 border-b border-blue-200">
+          <div className="rounded-[24px] bg-white p-8 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border-0">
+            <div className="pb-6 border-b border-slate-100 mb-6">
               <div className="flex items-center gap-2">
-                <BookOpen className="h-5 w-5 text-blue-600" />
-                <h3 className="font-semibold text-blue-900">Regras de Prestação de Contas</h3>
-                <Badge className="bg-blue-200 text-blue-700 ml-2">
+                <BookOpen className="h-5 w-5 text-slate-500" />
+                <h3 className="text-xl font-bold text-slate-900">Regras de Prestação de Contas</h3>
+                <Badge className="bg-slate-50 text-slate-600 border border-slate-200 shadow-none ml-2 rounded-full px-2.5 py-0.5 text-xs font-semibold">
                   Resolução ANP 918/2023
                 </Badge>
               </div>
             </div>
             <ScrollArea className="h-[calc(100vh-580px)] min-h-[400px]">
-              <div className="p-4 space-y-4">
+              <div className="space-y-4 pr-3">
                 {filteredSections.map((section) => {
                   const Icon = section.icon
                   return (
-                    <div key={section.id} className="border border-blue-200 rounded-lg overflow-hidden bg-white">
+                    <div key={section.id} className="border border-slate-200 rounded-[20px] overflow-hidden bg-white shadow-sm">
                       {/* Section Header */}
                       <button
                         onClick={() => toggleSection(section.id)}
-                        className="w-full flex items-center justify-between p-4 bg-blue-50 hover:bg-blue-100 transition-colors"
+                        className="w-full flex items-center justify-between p-5 bg-slate-50/50 hover:bg-slate-50 transition-colors cursor-pointer"
                       >
                         <div className="flex items-center gap-3">
                           <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${getIconColor(section.cor)}`}>
                             <Icon className="h-5 w-5" />
                           </div>
                           <div className="text-left">
-                            <span className="font-semibold text-blue-900">{section.titulo}</span>
-                            <p className="text-sm text-blue-600">{section.resumo}</p>
+                            <span className="font-semibold text-slate-900">{section.titulo}</span>
+                            <p className="text-xs text-slate-500 mt-0.5">{section.resumo}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Badge variant="outline" className="text-xs text-blue-700 border-blue-300">
+                          <Badge variant="outline" className="text-xs text-slate-600 border-slate-200 rounded-full font-medium shadow-none bg-white">
                             {section.artigos.length} regras
                           </Badge>
                           {expandedSections.includes(section.id) ? (
-                            <ChevronDown className="h-5 w-5 text-blue-400" />
+                            <ChevronDown className="h-5 w-5 text-slate-400" />
                           ) : (
-                            <ChevronRight className="h-5 w-5 text-blue-400" />
+                            <ChevronRight className="h-5 w-5 text-slate-400" />
                           )}
                         </div>
                       </button>
@@ -548,14 +551,14 @@ export default function ManualPage() {
                             transition={{ duration: 0.2 }}
                             className="overflow-hidden"
                           >
-                            <div className="p-4 space-y-3 border-t border-blue-100">
+                            <div className="p-5 space-y-3 border-t border-slate-100">
                               {section.artigos.map((artigo) => (
                                 <div 
                                   key={artigo.id}
-                                  className={`rounded-lg border p-4 ${
+                                  className={`rounded-xl border p-4 ${
                                     artigo.destaque 
-                                      ? 'border-amber-200 bg-amber-50' 
-                                      : 'border-blue-100 bg-blue-50/30'
+                                      ? 'border-amber-200 bg-amber-50/30' 
+                                      : 'border-slate-100 bg-slate-50/30'
                                   }`}
                                 >
                                   <div className="flex items-start justify-between gap-4">
@@ -564,18 +567,18 @@ export default function ManualPage() {
                                         <Badge 
                                           className={
                                             artigo.destaque
-                                              ? 'bg-amber-100 text-amber-700'
-                                              : 'bg-blue-100 text-blue-700'
+                                              ? 'bg-amber-100/70 text-amber-800 border-amber-200/50 shadow-none font-semibold rounded-full px-2.5 py-0.5 text-xs'
+                                              : 'bg-slate-100 text-slate-600 border-slate-200/50 shadow-none font-semibold rounded-full px-2.5 py-0.5 text-xs'
                                           }
                                         >
                                           {artigo.numero}
                                         </Badge>
-                                        <span className="font-medium text-blue-900">{artigo.titulo}</span>
+                                        <span className="font-semibold text-slate-900">{artigo.titulo}</span>
                                         {artigo.destaque && (
                                           <AlertTriangle className="h-4 w-4 text-amber-500" />
                                         )}
                                       </div>
-                                      <p className="text-blue-700 text-sm leading-relaxed">
+                                      <p className="text-slate-600 text-sm leading-relaxed">
                                         {artigo.conteudo}
                                       </p>
                                     </div>
@@ -584,7 +587,7 @@ export default function ManualPage() {
                                         variant="ghost"
                                         size="sm"
                                         onClick={() => toggleBookmark(artigo.id)}
-                                        className={bookmarked.includes(artigo.id) ? 'text-blue-600' : 'text-gray-400'}
+                                        className={bookmarked.includes(artigo.id) ? 'text-emerald-600 hover:text-emerald-700' : 'text-slate-400 hover:text-slate-600'}
                                       >
                                         <Bookmark className="h-4 w-4" fill={bookmarked.includes(artigo.id) ? 'currentColor' : 'none'} />
                                       </Button>
@@ -592,11 +595,12 @@ export default function ManualPage() {
                                         variant="ghost"
                                         size="sm"
                                         onClick={() => copyToClipboard(`${artigo.numero}: ${artigo.conteudo}`, artigo.id)}
+                                        className="text-slate-400 hover:text-slate-600"
                                       >
                                         {copiedId === artigo.id ? (
                                           <Check className="h-4 w-4 text-emerald-500" />
                                         ) : (
-                                          <Copy className="h-4 w-4 text-gray-400" />
+                                          <Copy className="h-4 w-4 text-slate-400" />
                                         )}
                                       </Button>
                                     </div>
@@ -615,12 +619,12 @@ export default function ManualPage() {
           </div>
 
           {/* Rodapé informativo */}
-          <div className="bg-blue-100/80 rounded-xl border border-blue-200 p-4">
+          <div className="rounded-[24px] bg-white p-6 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border-0">
             <div className="flex items-start gap-3">
-              <Info className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
+              <Info className="h-5 w-5 text-[#708D7A] shrink-0 mt-0.5" />
               <div>
-                <h4 className="font-medium text-blue-900">Sobre este Manual</h4>
-                <p className="text-sm text-blue-700 mt-1">
+                <h4 className="font-bold text-slate-900">Sobre este Manual</h4>
+                <p className="text-sm text-slate-500 mt-1">
                   Este conteúdo é baseado no Manual de Gestão de Projetos de PD&I da Petrobras (Versão 26 - 20/08/2025) 
                   e na Resolução ANP 918/2023. Para consultas completas, acesse o manual oficial através do SIGITEC ou 
                   entre em contato pelo email investimentoexterno@petrobras.com.br

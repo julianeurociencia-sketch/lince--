@@ -22,11 +22,11 @@ export default function UploadNotasPage() {
   const isSidebarCollapsed = state === 'collapsed'
 
   return (
-    <div className="min-h-screen w-full flex flex-col bg-blue-50 overflow-x-hidden">
+    <div className="min-h-screen w-full flex flex-col bg-[#F5F3EF] overflow-x-hidden">
       <Sidebar />
 
       {/* Header Fixo */}
-      <div className="fixed top-0 left-0 right-0 z-30 w-full bg-blue-900 shadow-lg">
+      <div className="fixed top-0 left-0 right-0 z-30 w-full bg-white shadow-sm">
         <div className={cn(
           "transition-all duration-300 ease-linear",
           isSidebarCollapsed ? "pl-[72px]" : "pl-[72px] lg:pl-[260px]"
@@ -36,7 +36,7 @@ export default function UploadNotasPage() {
       </div>
 
       <div className={cn(
-        "flex-1 w-full pt-20 transition-all duration-300 ease-linear",
+        "flex-1 w-full pt-24 transition-all duration-300 ease-linear",
         isSidebarCollapsed ? "pl-[72px]" : "pl-[72px] lg:pl-[260px]"
       )}>
         <main className="p-8 space-y-8 w-full max-w-7xl mx-auto">
@@ -59,14 +59,14 @@ export default function UploadNotasPage() {
 
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1.95fr)_minmax(340px,1fr)]">
             <div className="space-y-8">
-              <section className="bg-white rounded-3xl p-8 shadow-sm border border-slate-200/60">
+              <section className="rounded-[24px] bg-white p-8 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
                 <div className="mb-6">
                   <h3 className="text-xl font-bold text-slate-900">Enviar arquivos</h3>
                   <p className="text-sm text-slate-500 mt-1">Você pode enviar múltiplos arquivos PDF ou XML simultaneamente.</p>
                 </div>
 
-                <div className="rounded-[28px] border-2 border-dashed border-blue-200 bg-blue-50/30 px-6 py-16 text-center cursor-pointer hover:bg-blue-50/60 transition-all group">
-                  <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-white text-blue-600 shadow-md border border-blue-50 group-hover:scale-110 transition-transform">
+                <div className="rounded-[22px] border-2 border-dashed border-slate-200 bg-slate-50/80 px-6 py-16 text-center cursor-pointer hover:bg-slate-50 transition-all group">
+                  <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-white text-[#708D7A] shadow-sm border border-slate-100 group-hover:scale-110 transition-transform">
                     <CloudUpload className="h-10 w-10" />
                   </div>
                   <p className="text-lg font-bold text-slate-900">Arraste as notas e comprovantes</p>
@@ -74,10 +74,10 @@ export default function UploadNotasPage() {
                 </div>
               </section>
 
-              <section className="bg-white rounded-3xl p-8 shadow-sm border border-slate-200/60">
+              <section className="rounded-[24px] bg-white p-8 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
                 <div className="mb-6 flex justify-between items-center">
                   <h3 className="text-xl font-bold text-slate-900">Arquivos na fila</h3>
-                  <Badge className="bg-blue-100 text-blue-700 border-blue-200 font-bold uppercase tracking-wider text-[10px]">
+                  <Badge className="bg-slate-100 text-slate-700 border-slate-200 font-bold uppercase tracking-wider text-[10px] shadow-none">
                     4 Arquivos
                   </Badge>
                 </div>
@@ -91,23 +91,24 @@ export default function UploadNotasPage() {
             </div>
 
             <div className="space-y-8">
-              <section className="bg-slate-900 rounded-3xl p-8 shadow-xl text-white relative overflow-hidden group">
-                <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl group-hover:bg-blue-500/20 transition-colors" />
+              <section className="rounded-[24px] bg-slate-900 p-8 shadow-[0_4px_20px_rgba(0,0,0,0.15)] text-white relative overflow-hidden group">
+                <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-[#708D7A]/10 rounded-full blur-3xl group-hover:bg-[#708D7A]/20 transition-colors" />
                 <h3 className="text-xl font-bold mb-3 relative z-10">Analisar parcela</h3>
                 <p className="text-sm leading-relaxed text-slate-400 mb-8 relative z-10">
                   O LINCE fará o cruzamento triplo entre a Nota Fiscal, o Comprovante de Pagamento e as Rubricas do Plano de Trabalho.
                 </p>
                 <button
                   // Removido o onClick que simulava o processamento
-                  className="w-full h-14 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl flex items-center justify-center gap-3 transition-all shadow-lg shadow-blue-900/50"
+                  className="w-full h-14 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-2xl flex items-center justify-center gap-3 transition-all shadow-lg shadow-emerald-950/20 cursor-pointer"
                 >
                   <Scan size={22} />
                   Iniciar Processamento
                 </button>
               </section>
-              <section className="bg-white rounded-3xl p-8 shadow-sm border border-slate-200/60">
+              
+              <section className="rounded-[24px] bg-white p-8 shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
                 <h3 className="text-lg font-bold text-slate-900 mb-8 flex items-center gap-2">
-                  <CheckCircle2 size={20} className="text-blue-600" />
+                  <CheckCircle2 size={20} className="text-emerald-600" />
                   Checklist de Envio
                 </h3>
                 <ul className="space-y-6">
@@ -129,7 +130,7 @@ function FileItem({ name, size }: { name: string, size: string }) {
   return (
     <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm transition-shadow group hover:shadow-md">
       <div className="flex items-center gap-3">
-        <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-blue-100 bg-blue-50 text-blue-600">
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-slate-100 bg-slate-50 text-slate-500">
           <FileText size={20} />
         </div>
         <div>
@@ -137,7 +138,7 @@ function FileItem({ name, size }: { name: string, size: string }) {
           <p className="text-xs text-slate-400">{size}</p>
         </div>
       </div>
-      <button className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-rose-50 hover:text-rose-500">
+      <button className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-rose-50 hover:text-rose-500 cursor-pointer">
         <Trash2 size={18} />
       </button>
     </div>
@@ -147,8 +148,8 @@ function FileItem({ name, size }: { name: string, size: string }) {
 function ChecklistItem({ text }: { text: string }) {
   return (
     <li className="flex gap-4">
-      <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-50">
-        <CheckCircle2 size={14} className="text-blue-600" />
+      <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-50">
+        <CheckCircle2 size={14} className="text-emerald-600" />
       </div>
       <span className="text-sm leading-tight text-slate-600">{text}</span>
     </li>

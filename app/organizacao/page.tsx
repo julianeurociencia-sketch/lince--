@@ -118,8 +118,8 @@ export default function OrganizacaoPage() {
   const getDocumentIcon = (type: string) => {
     switch (type) {
       case 'nota_fiscal': return <FileSpreadsheet className="h-4 w-4 text-emerald-600" />
-      case 'comprovante': return <File className="h-4 w-4 text-blue-600" />
-      default: return <FileText className="h-4 w-4 text-blue-600" />
+      case 'comprovante': return <File className="h-4 w-4 text-slate-500" />
+      default: return <FileText className="h-4 w-4 text-slate-500" />
     }
   }
 
@@ -132,24 +132,24 @@ export default function OrganizacaoPage() {
       <div>
         <div
           className={cn(
-            'flex items-center gap-2 py-2 px-3 rounded-lg cursor-pointer transition-colors hover:bg-blue-200/50',
+            'flex items-center gap-2 py-2 px-3 rounded-lg cursor-pointer transition-colors hover:bg-slate-50',
             level > 0 && 'ml-6'
           )}
           onClick={() => toggleNode(node.id)}
         >
           {(hasChildren || hasDocuments) ? (
-            isExpanded ? <ChevronDown className="h-4 w-4 text-blue-400 shrink-0" /> : <ChevronRight className="h-4 w-4 text-blue-400 shrink-0" />
+            isExpanded ? <ChevronDown className="h-4 w-4 text-slate-400 shrink-0" /> : <ChevronRight className="h-4 w-4 text-slate-400 shrink-0" />
           ) : (
             <div className="w-4" />
           )}
           
           {node.type === 'category' ? (
-            isExpanded ? <FolderOpen className="h-5 w-5 text-blue-600 shrink-0" /> : <Folder className="h-5 w-5 text-blue-600 shrink-0" />
+            isExpanded ? <FolderOpen className="h-5 w-5 text-slate-500 shrink-0" /> : <Folder className="h-5 w-5 text-slate-500 shrink-0" />
           ) : (
-            <Folder className="h-4 w-4 text-blue-400 shrink-0" />
+            <Folder className="h-4 w-4 text-slate-400 shrink-0" />
           )}
           
-          <span className={cn('flex-1 text-sm truncate', node.type === 'category' ? 'font-medium text-blue-900' : 'text-blue-700')}>
+          <span className={cn('flex-1 text-sm truncate', node.type === 'category' ? 'font-medium text-slate-900' : 'text-slate-700')}>
             {node.name}
           </span>
 
@@ -159,7 +159,7 @@ export default function OrganizacaoPage() {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Badge variant="outline" className="text-xs border-blue-300 text-blue-700">
+                    <Badge variant="outline" className="text-xs border-slate-200 text-slate-600">
                       {((node.usedValue || 0) / node.approvedValue * 100).toFixed(0)}%
                     </Badge>
                   </TooltipTrigger>
@@ -173,7 +173,7 @@ export default function OrganizacaoPage() {
           )}
 
           {hasDocuments && (
-            <Badge className="bg-blue-200 text-blue-700 text-xs">
+            <Badge className="bg-slate-100 text-slate-600 text-xs border border-slate-200 shadow-none">
               {node.documents!.length} docs
             </Badge>
           )}
@@ -186,13 +186,13 @@ export default function OrganizacaoPage() {
               {hasDocuments && (
                 <div className="ml-12 space-y-1 pb-2">
                   {node.documents!.map(doc => (
-                    <div key={doc.id} className="flex items-center gap-2 py-1.5 px-3 rounded-md hover:bg-blue-200/30 transition-colors">
+                    <div key={doc.id} className="flex items-center gap-2 py-1.5 px-3 rounded-md hover:bg-slate-50 transition-colors">
                       {getDocumentIcon(doc.type)}
-                      <span className="flex-1 text-sm text-blue-700 truncate">{doc.name}</span>
-                      <Badge className={cn('text-xs', doc.status === 'aprovado' ? 'bg-emerald-100 text-emerald-700' : doc.status === 'com_divergencia' ? 'bg-red-100 text-red-700' : doc.status === 'analisado' ? 'bg-blue-100 text-blue-700' : 'bg-amber-100 text-amber-700')}>
+                      <span className="flex-1 text-sm text-slate-700 truncate">{doc.name}</span>
+                      <Badge className={cn('text-xs rounded-full border shadow-none px-2.5 py-0.5', doc.status === 'aprovado' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : doc.status === 'com_divergencia' ? 'bg-rose-50 text-rose-700 border-rose-100' : doc.status === 'analisado' ? 'bg-slate-50 text-slate-600 border-slate-200' : 'bg-amber-50 text-amber-700 border-amber-100')}>
                         {doc.status === 'aprovado' ? 'Aprovado' : doc.status === 'com_divergencia' ? 'Divergência' : doc.status === 'analisado' ? 'Analisado' : 'Pendente'}
                       </Badge>
-                      <Button variant="ghost" size="icon" className="h-6 w-6 text-blue-600"><Link2 className="h-3 w-3" /></Button>
+                      <Button variant="ghost" size="icon" className="h-6 w-6 text-slate-500 hover:text-slate-800"><Link2 className="h-3 w-3" /></Button>
                     </div>
                   ))}
                 </div>
@@ -205,11 +205,11 @@ export default function OrganizacaoPage() {
   }
 
   return (
-    <div className="min-h-screen w-full flex flex-col bg-blue-50 overflow-x-hidden">
+    <div className="min-h-screen w-full flex flex-col bg-[#F5F3EF] overflow-x-hidden">
       <Sidebar />
       
-      {/* Header Fixo - Apenas "Organização" e sem subtítulo */}
-      <div className="fixed top-0 left-0 right-0 z-30 w-full bg-blue-900 shadow-md">
+      {/* Header Fixo */}
+      <div className="fixed top-0 left-0 right-0 z-30 w-full bg-white shadow-sm">
         <div className={cn(
           "transition-all duration-300 ease-linear",
           isSidebarCollapsed ? "pl-[72px]" : "pl-[72px] lg:pl-[260px]"
@@ -219,29 +219,35 @@ export default function OrganizacaoPage() {
       </div>
       
       <div className={cn(
-        "flex-1 w-full pt-20 transition-all duration-300 ease-linear",
+        "flex-1 w-full pt-24 transition-all duration-300 ease-linear",
         isSidebarCollapsed ? "pl-[72px]" : "pl-[72px] lg:pl-[260px]"
       )}>
-        <main className="p-6 space-y-6 w-full">
+        <main className="space-y-8 p-8 w-full max-w-7xl mx-auto">
+          <nav className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            <span>Lince</span>
+            <ChevronRight size={12} className="text-slate-300" />
+            <span className="text-slate-900">Organização</span>
+          </nav>
+
           <div className="flex flex-wrap items-center gap-4">
             <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
-              <SelectTrigger className="w-44 bg-white border-blue-200">
-                <Calendar className="h-4 w-4 mr-2 text-blue-600" />
+              <SelectTrigger className="w-44 bg-white border-slate-200 text-slate-700 shadow-sm rounded-xl">
+                <Calendar className="h-4 w-4 mr-2 text-slate-500" />
                 <SelectValue placeholder="Período" />
               </SelectTrigger>
-              <SelectContent className="bg-white">
+              <SelectContent className="bg-white border-slate-200">
                 <SelectItem value="all">Todos os períodos</SelectItem>
                 <SelectItem value="month">Último mês</SelectItem>
               </SelectContent>
             </Select>
             
-            <Button variant="outline" className="border-blue-200 text-blue-700 bg-white">
+            <Button variant="outline" className="border-slate-200 text-slate-700 bg-white hover:bg-slate-50 shadow-sm rounded-xl">
               <Filter className="h-4 w-4 mr-2" />
               Filtros
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
             <StatsCard title="Total de Documentos" value="50" icon={FileText} variant="default" />
             <StatsCard title="Classificados" value="42" icon={CheckCircle2} variant="success" />
             <StatsCard title="Pendentes" value="8" icon={Clock} variant="warning" />
@@ -249,17 +255,17 @@ export default function OrganizacaoPage() {
           </div>
 
           <div className="grid gap-6 lg:grid-cols-3 w-full">
-            <div className="lg:col-span-2 bg-[#ebf2ff] rounded-xl border border-blue-200 p-6 shadow-sm">
+            <div className="lg:col-span-2 rounded-[24px] bg-white p-8 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border-0">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  <FolderTree className="h-5 w-5 text-blue-600" />
-                  <h3 className="font-semibold text-blue-900">Estrutura do Plano de Trabalho</h3>
+                  <FolderTree className="h-5 w-5 text-slate-500" />
+                  <h3 className="text-xl font-bold text-slate-900">Estrutura do Plano de Trabalho</h3>
                 </div>
               </div>
 
               <div className="relative mb-4">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-blue-400" />
-                <Input placeholder="Buscar documentos ou categorias..." className="pl-9 bg-white border-blue-200" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <Input placeholder="Buscar documentos ou categorias..." className="pl-9 bg-white border-slate-200 focus-visible:ring-slate-300 rounded-xl" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
               </div>
 
               <div className="space-y-1 max-h-[500px] overflow-y-auto pr-2">
@@ -268,64 +274,66 @@ export default function OrganizacaoPage() {
             </div>
 
             <div className="space-y-6">
-              <div className="bg-[#ebf2ff] rounded-xl border border-blue-200 p-6 shadow-sm">
-                <h3 className="font-semibold text-blue-900 mb-4">Resumo da Análise</h3>
+              <div className="rounded-[24px] bg-white p-8 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border-0">
+                <h3 className="text-lg font-bold text-slate-900 mb-4">Resumo da Análise</h3>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-blue-700">Documentos classificados</span>
-                    <span className="font-medium text-blue-900">42</span>
+                    <span className="text-sm text-slate-700">Documentos classificados</span>
+                    <span className="font-semibold text-slate-900">42</span>
                   </div>
-                  <Progress value={84} className="h-2 bg-blue-200" />
-                  <div className="flex items-center justify-between text-xs text-blue-600">
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+                    <div className="h-full rounded-full bg-emerald-600" style={{ width: '84%' }} />
+                  </div>
+                  <div className="flex items-center justify-between text-xs text-slate-500">
                     <span>84% classificados</span>
                     <span>8 pendentes</span>
                   </div>
                   
-                  <div className="pt-4 border-t border-blue-200 space-y-3">
+                  <div className="pt-4 border-t border-slate-100 space-y-3">
                     <div className="flex items-center gap-3">
                       <CheckCircle2 className="h-5 w-5 text-emerald-500" />
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-blue-900">35 documentos</p>
-                        <p className="text-xs text-blue-600">Corretamente vinculados</p>
+                        <p className="text-sm font-semibold text-slate-900">35 documentos</p>
+                        <p className="text-xs text-slate-500">Corretamente vinculados</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
                       <AlertTriangle className="h-5 w-5 text-amber-500" />
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-blue-900">7 documentos</p>
-                        <p className="text-xs text-blue-600">Precisam de revisão</p>
+                        <p className="text-sm font-semibold text-slate-900">7 documentos</p>
+                        <p className="text-xs text-slate-500">Precisam de revisão</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Unlink className="h-5 w-5 text-red-500" />
+                      <Unlink className="h-5 w-5 text-rose-500" />
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-blue-900">{orphanDocuments.length} documentos</p>
-                        <p className="text-xs text-blue-600">Com divergências</p>
+                        <p className="text-sm font-semibold text-slate-900">{orphanDocuments.length} documentos</p>
+                        <p className="text-xs text-slate-500">Com divergências</p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-[#ebf2ff] rounded-xl border border-blue-200 p-6 shadow-sm">
+              <div className="rounded-[24px] bg-white p-8 shadow-[0_4px_20px_rgba(0,0,0,0.05)] border-0">
                 <div className="flex items-center gap-2 mb-4">
-                  <Unlink className="h-5 w-5 text-red-500" />
-                  <h3 className="font-semibold text-blue-900">Documentos com Divergências</h3>
+                  <Unlink className="h-5 w-5 text-rose-500" />
+                  <h3 className="text-lg font-bold text-slate-900">Documentos com Divergências</h3>
                 </div>
                 {orphanDocuments.length > 0 ? (
                   <div className="space-y-2">
                     {orphanDocuments.slice(0, 5).map(doc => (
-                      <div key={doc.id} className="flex items-center gap-2 p-3 rounded-lg bg-blue-200/50 border border-blue-300">
+                      <div key={doc.id} className="flex items-center gap-2 p-3 rounded-lg bg-slate-50 border border-slate-100">
                         {getDocumentIcon(doc.type)}
-                        <span className="flex-1 text-sm text-blue-900 truncate">{doc.name}</span>
-                        <Button variant="ghost" size="sm" className="text-blue-600">Revisar</Button>
+                        <span className="flex-1 text-sm text-slate-900 truncate">{doc.name}</span>
+                        <Button variant="ghost" size="sm" className="text-slate-500 hover:text-slate-900 hover:bg-slate-100 cursor-pointer">Revisar</Button>
                       </div>
                     ))}
                   </div>
                 ) : (
                   <div className="text-center py-6">
                     <CheckCircle2 className="h-12 w-12 text-emerald-500 mx-auto mb-3" />
-                    <p className="text-sm text-blue-700">Todos os documentos estão conformes</p>
+                    <p className="text-sm text-slate-500">Todos os documentos estão conformes</p>
                   </div>
                 )}
               </div>
